@@ -13,6 +13,7 @@ The workshop doesn't cover Drupal theming, writing tests for Islandora modules o
   * Islandora coding conventions
   * Islandora API
   * Hooks
+* Participating in the Islandora development community
 
 ## Islandora objects
 
