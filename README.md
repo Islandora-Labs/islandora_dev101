@@ -1,6 +1,6 @@
 This 2-hour workshop will introduce Islandora objects and how they work within Drupal. It will also cover the basics of Islandora modules, and introduce Drupal hooks.
 
-The workshop doesn't cover Solr indexing, Drupal theming, writing tests for Islandora modules or access control in Islandora. In the second hour of the workshop, participants will start coding their own simple Islandora module.
+The workshop doesn't cover Solr indexing, Drupal theming, writing tests for Islandora modules or access control in Islandora. In the second hour of the workshop, participants will start coding their own simple Islandora module. To prepare for this part of the workshop, make sure you have installed the [Islandora Vagrant](https://github.com/Islandora-Labs/islandora_vagrant) virtual machine.
 
 ## Outline
 
