@@ -16,7 +16,7 @@ The workshop doesn't cover Drupal theming, writing tests for Islandora modules o
 * Participating in the Islandora development community
 
 ## Islandora objects
-Content models, structure/properties
+Are fundamentally Fedora objects. Content models, structure/properties
 
 ## Islandora's relationship with Drupal
 
