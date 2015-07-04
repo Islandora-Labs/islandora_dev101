@@ -107,5 +107,6 @@ Hi complexity:
 
 ### Hooks
 
-[Islandora provides many](https://github.com/Islandora/islandora/blob/7.x/islandora.api.php). In this workshop, we'll focus on the ones that are fired during the object add/update/purge lifecycle, and use a couple of others.
+A Drupal (and Islandora) hook is a special type of function that is fired at a predefined time in the execution of a page request.
 
+[Islandora provides many](https://github.com/Islandora/islandora/blob/7.x/islandora.api.php). In this workshop, we'll focus on the ones that are fired during the object add/update/purge lifecycle, and use a couple of others.
