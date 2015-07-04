@@ -1,6 +1,6 @@
-This 2-hour workshop will introduce Islandora objects and how they work within Drupal. It will also cover the basics of Islandora modules, and introduce Drupal hooks.
+This 2-hour workshop will introduce Islandora objects and how they work within Drupal. It will also cover the basics of Islandora modules, and introduce Drupal hooks. The workshop doesn't cover Solr indexing, Drupal theming, writing tests for Islandora modules or access control in Islandora.
 
-The workshop doesn't cover Solr indexing, Drupal theming, writing tests for Islandora modules or access control in Islandora. In the second hour of the workshop, participants will start coding their own simple Islandora module. To prepare for this part of the workshop, make sure you have installed the [Islandora Vagrant](https://github.com/Islandora-Labs/islandora_vagrant) virtual machine.
+In the second hour of the workshop, participants will start coding their own simple Islandora module. To prepare for this part of the workshop, make sure you have installed the [Islandora Vagrant](https://github.com/Islandora-Labs/islandora_vagrant) virtual machine on your laptop.
 
 ## Outline
 
@@ -8,12 +8,11 @@ The workshop doesn't cover Solr indexing, Drupal theming, writing tests for Isla
 * Islandora's relationship with Drupal
 * Tuque
 * Islandora modules
-  * Types: solution packs and utility modules
+  * Types: solution packs, integration modules utility modules
   * Structure
   * Islandora coding conventions
   * Islandora API
   * Hooks
-* Participating in the Islandora development community
 
 ## Islandora objects
 Are fundamentally Fedora objects. Content models, structure/properties
@@ -35,7 +34,7 @@ Simplest:
 ```
 .
 ├── islandora_foo.info
-├── islandora_fooodule
+├── islandora_foo.module
 ├── LICENSE
 ├── README.md
 ```
@@ -108,5 +107,5 @@ Hi complexity:
 
 ### Hooks
 
+[Islandora provides many](https://github.com/Islandora/islandora/blob/7.x/islandora.api.php). In this workshop, we'll focus on the ones that are fired during the object add/update/purge lifecycle, and use a couple of others.
 
-## Participating in the Islandora development community
