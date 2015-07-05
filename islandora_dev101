@@ -1,0 +1,118 @@
+<?php
+
+/**
+ * @file
+ * Defines all the hooks this module implements, and some other functions.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function islandora_dev101_menu() {
+  $items = array();
+  $items['admin/islandora/tools/log_ingest'] = array(
+    'title' => 'Islandora Log Ingest',
+    'description' => 'Configure Islandora Log Ingest.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('islandora_dev101_admin_settings'),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+/**
+ * Admin settings form builder.
+ */
+function islandora_dev101_admin_settings() {
+  $default_log_path = drupal_realpath(file_default_scheme() . '://');
+  $default_log_path .= '/islandora_dev101.txt';
+  $form['islandora_dev101_log_file_path'] = array(
+    '#title' => t('Log file path'),
+    '#type' => 'textfield',
+    '#size' => 60,
+    '#default_value' => variable_get('islandora_dev101_log_file_path', $default_log_path),
+    '#description' => t("Absolute file system path to where the log file."),
+    '#maxlength' => 255,
+  );
+  $form['islandora_dev101_entry_prefix'] = array(
+    '#title' => t('Log entry prefix'),
+    '#type' => 'textfield',
+    '#size' => 60,
+    '#default_value' => variable_get('islandora_dev101_entry_prefix', ''),
+    '#description' => t("String that is placed in the first position of the
+      each log entry, to identify a batch load, for example."),
+    '#maxlength' => 255,
+  );
+  $form['islandora_dev101_entry_delimiter'] = array(
+    '#title' => t('Log entry delimiter'),
+    '#type' => 'textfield',
+    '#size' => 5,
+    '#default_value' => variable_get('islandora_dev101_entry_delimiter', ''),
+    '#description' => t("String used to separate parts of the log entry. Leave
+      blank to use \\t (tab)."),
+    '#maxlength' => 255,
+  );
+  $form['islandora_dev101_id_delimiter'] = array(
+    '#title' => t('Repeated dc:identifier delimiter'),
+    '#type' => 'textfield',
+    '#size' => 5,
+    '#default_value' => variable_get('islandora_dev101_id_delimiter', ';'),
+    '#description' => t("String used to separate repeated dc:identifier values."),
+    '#maxlength' => 255,
+  );
+  return system_settings_form($form);
+}
+
+/**
+ * Implements hook_islandora_object_ingested().
+ */
+function islandora_dev101_islandora_object_ingested(FedoraObject $islandora_object) {
+  $identifiers = islandora_dev101_get_identifer($islandora_object['DC'], $islandora_object->id);
+  $prefix = variable_get('islandora_dev101_entry_prefix', '');
+  $log_path = variable_get('islandora_dev101_log_file_path', '/tmp/islanodra_log_ingest.txt');
+  $entry = array();
+  $delimiter = variable_get('islandora_dev101_entry_delimiter', '');
+  if (strlen($prefix)) {
+    $entry[] = $prefix;
+  }
+  $entry[] = $identifiers;
+  $entry[] = $islandora_object->id;
+  if (!strlen($delimiter)) {
+    $entry_string = implode("\t", $entry) . "\n";
+  }
+  else {
+    $entry_string = implode($delimiter, $entry) . "\n";
+  }
+  file_put_contents($log_path, $entry_string, FILE_APPEND);
+}
+
+/**
+ * Parses an object's dc:identifier elements and returns their values.
+ *
+ * @param string $dc
+ *   The 'DC' datastream.
+ *
+ * @param string $pid
+ *   The PID of the Islandora object just ingested.
+ *
+ * return string
+ *   A string listing the values in dc:identifier, concatenated
+ *   by a configurable delimter if there are more than one dc:identifier.
+ */
+function islandora_dev101_get_identifer($dc, $pid) {
+  $id_delim = variable_get('islandora_dev101_id_delimiter', ';');
+  $identifiers = array();
+  $dom = new DOMDocument();
+  $dom->loadXML($dc->content);
+  foreach ($dom->getElementsByTagNameNS('http://purl.org/dc/elements/1.1/', 'identifier') as $element) {
+    $identifier = trim($element->nodeValue);
+    if ($identifier != $pid) {
+      $identifiers[] = $identifier;
+    }
+  }
+  if (!count($identifiers)) {
+    $identifiers = array('');
+  }
+  return implode($id_delim, $identifiers);
+}
