@@ -71,6 +71,7 @@ if (!$object) {
  $datastream = islandora_datastream_load($dsid, $object);
  ```
  or
+ 
  ```php
  foreach ($object as $datastream) {
   strtoupper($datastream->id);
