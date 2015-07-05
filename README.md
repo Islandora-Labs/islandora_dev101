@@ -111,7 +111,43 @@ A Drupal (and Islandora) hook is a special type of function that is fired at a p
 
 For example, hook_islandora_object_access() is defined by the Islandora module, but is used by many other modules to determine whether a user is allowed to perform a specific action on an object.
 
-islandora.module:
+Here is the entry in islandora.api.php for hook_islandora_object_access():
+
+```php
+/**
+ * Object-level access callback hook.
+ *
+ * @param string $op
+ *   A string define an operation to check. Should be defined via
+ *   hook_permission().
+ * @param AbstractObject $object
+ *   An object to check the operation on.
+ * @param object $user
+ *   A loaded user object, as the global $user variable might contain.
+ *
+ * @return bool|NULL|array
+ *   Either boolean TRUE or FALSE to explicitly allow or deny the operation on
+ *   the given object, or NULL to indicate that we are making no assertion
+ *   about the outcome. Can also be an array containing multiple
+ *   TRUE/FALSE/NULLs, due to how hooks work.
+ */
+function hook_islandora_object_access($op, $object, $user) {
+  switch ($op) {
+    case 'create stuff':
+      return TRUE;
+    case 'break stuff':
+      return FALSE;
+    case 'do a barrel roll!':
+      return NULL;
+  }
+}
+```
+
+The entry provides the function signature and the parameter/return documentationH, plus (in some caes) some sample code. The function signature begins with the word 'hook' but when we implement the hook in our modules, we replace that with the name of the module. This "magic" naming convention is how Drupal knows to fire the hook implementations.
+
+Here are three implementations of the hook:
+
+islandora.module itself:
 
 ```php
 /**
@@ -188,6 +224,6 @@ function islandora_basic_collection_islandora_object_access($op, $object, $user)
   return $result;
 }
 ```
+Hooks are fired in the providing module's code via the Drupal API function `[module_invoke_all()](https://api.drupal.org/api/drupal/includes!module.inc/function/module_invoke_all/7).`
 
-
-[Islandora provides many](https://github.com/Islandora/islandora/blob/7.x/islandora.api.php). In this workshop, we'll focus on the ones that are fired during the object add/update/purge lifecycle, and use a couple of others.
+Islandora provides [many](https://github.com/Islandora/islandora/blob/7.x/islandora.api.php) hooks. In this workshop, we'll focus on the ones that are fired during the object add/update/purge lifecycle, and use a couple of others.
