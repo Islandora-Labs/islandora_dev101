@@ -31,7 +31,7 @@ The [Islandora Vagrant](https://github.com/Islandora-Labs/islandora_vagrant) vir
 * `drush en module_name`: enables the module with 'module_name'. If the module is hosted on Drupal.org, will also download it and all module dependencies if necessary.
 * `drush dis module_name`: disables the module with 'module_name'.
 
-Drush is installed and ready to use on the Islandora Vagrant VM.
+You run drush commands from anywhere within the Drupal installation directory. Drush is installed and ready to use on the Islandora Vagrant VM.
 
 ### Some additional helpful tools
 
@@ -94,7 +94,7 @@ In fact, the only part of Drupal that Islandora doesn't use is the node subsyste
 
 The standard approach to extending Drupal is through modules. Islandora modules follow the patterns established for Drupal modules. The most basic Islandora module contains two files, an .info file and a .module file, within a directory. Here are some examples of the structure of Islandora modules, in increasing order of complexity:
 
-Simplest:
+Simplest (the module that you'll be playing with during this workshop):
 
 ```
 .
@@ -104,7 +104,7 @@ Simplest:
 ├── README.md
 ```
 
-Average complexity (Islandora FITS):
+Average complexity ([Islandora FITS](https://github.com/Islandora/islandora_fits)):
 ```
 .
 ├── build
@@ -124,7 +124,7 @@ Average complexity (Islandora FITS):
     └── islandora-fits-metadata.tpl.php
 ```
 
-Hi complexity (Islandora Book Solution Pack):
+Hi complexity ([Islandora Book Solution Pack](https://github.com/Islandora/islandora_solution_pack_book)):
 
 ```
 .
