@@ -53,6 +53,8 @@ An Islandora object has properties (including id, label, createdDate, models) an
 </rdf:RDF>
 ```
 
+An Islandora object's properties can be accessed like any other PHP object's properties. Within Islandora modules, you usually have access to either a full Islandora object, or its PID (persistent identifier). A common pattern for accessing the object is:
+
 ```php
 // If you only have a PID, you must load the corresponding Islandora object.
 $object = islandora_object_load($pid);
@@ -62,6 +64,20 @@ if (!$object) {
 }
   // Logic for object load success would continue through the rest your code.
  ```
+ 
+ To access the object's datastreams, you can use this pattern:
+ 
+ ```php
+ $datastream = islandora_datastream_load($dsid, $object);
+ ```
+ or
+ ```php
+ foreach ($object as $datastream) {
+  strtoupper($datastream->id);
+  $datastream->label = "new label";
+  $datastream_content = $datastream->getContent();
+}
+```
  
  ### Content models
  
