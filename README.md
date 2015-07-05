@@ -8,7 +8,7 @@ In the second hour of the workshop, participants will start coding their own sim
 * Islandora's relationship with Drupal
 * Tuque
 * Islandora modules
-  * Types: solution packs, integration modules utility modules
+  * Types
   * Structure
   * Islandora coding conventions
   * Islandora API
@@ -26,6 +26,10 @@ Are fundamentally Fedora objects. Content models, structure/properties
 ## Islandora modules
 
 ### Types
+
+* solution packs
+* integration modules
+* utility modules
 
 ### Structure
 
@@ -111,7 +115,7 @@ A Drupal (and Islandora) hook is a special type of function that is fired at a p
 
 For example, hook_islandora_object_access() is defined by the Islandora module, but is used by many other modules to determine whether a user is allowed to perform a specific action on an object.
 
-Here is the entry in islandora.api.php for hook_islandora_object_access():
+Here is the entry in [islandora.api.php](https://github.com/Islandora/islandora/blob/7.x/islandora.api.php) for hook_islandora_object_access():
 
 ```php
 /**
