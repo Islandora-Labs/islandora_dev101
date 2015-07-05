@@ -113,7 +113,7 @@ Hi complexity:
 
 ### Hooks
 
-A Drupal (and Islandora) hook is a special type of function that is fired at a predefined time in the execution of a page request. They are "defined" by a module and "implemented" by other modules. In this way, hooks lets a Drupal module add functionality that can be used by another module. Unlike a function, which you call to get an expected result from, a hook lets you write a function that always gets called by Drupal at a specific time.
+A Drupal (and Islandora) hook is a special type of function that is fired at a predefined time in the execution of a page request. They are "defined" by a module and "implemented" by other modules. In this way, hooks lets a Drupal module add functionality that can be used by another module. Unlike a function, which you call to get an expected return value, a hook lets you write a function that always gets called by Drupal at a specific time. More information on hooks is available from [drupal.org](https://www.drupal.org/node/292).
 
 For example, hook_islandora_object_access() is defined by the Islandora module, but is used by many other modules to determine whether a user is allowed to perform a specific action on an object.
 
