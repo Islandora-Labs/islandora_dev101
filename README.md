@@ -147,7 +147,7 @@ The entry provides the function signature and the parameter/return documentation
 
 Here are three implementations of the hook:
 
-islandora.module itself:
+from islandora.module itself:
 
 ```php
 /**
@@ -163,7 +163,7 @@ function islandora_islandora_object_access($op, $object, $user) {
 }
 ```
 
-islandora_scholar_embargo.module:
+from islandora_scholar_embargo.module:
 
 ```php
 /**
@@ -179,7 +179,7 @@ function islandora_scholar_embargo_islandora_object_access($op, $object, $user) 
   }
 }
 ```
-islandora_basic_collection.module:
+from islandora_basic_collection.module:
 
 ```php
 /**
@@ -224,6 +224,6 @@ function islandora_basic_collection_islandora_object_access($op, $object, $user)
   return $result;
 }
 ```
-Hooks are fired in the providing module's code via the Drupal API function `[module_invoke_all()](https://api.drupal.org/api/drupal/includes!module.inc/function/module_invoke_all/7).`
+Hooks are fired in the providing module's code via the [Drupal API function](https://api.drupal.org/api/drupal/includes!module.inc/function/module_invoke_all/7) `[module_invoke_all()]`, which iterates through all modules that implement each hook and if it finds an implementation, fires it.
 
 Islandora provides [many](https://github.com/Islandora/islandora/blob/7.x/islandora.api.php) hooks. In this workshop, we'll focus on the ones that are fired during the object add/update/purge lifecycle, and use a couple of others.
