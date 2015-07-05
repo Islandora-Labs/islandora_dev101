@@ -1,6 +1,6 @@
 This 2-hour workshop will introduce Islandora objects and how they work within Drupal. It will also cover the basics of Islandora modules, and introduce Drupal hooks. The workshop doesn't cover Solr indexing, Drupal theming, writing tests for Islandora modules or access control in Islandora. We'll be covering Islandora 7.x-1.x development (that is, Islandora using FedoraCommons 3.x), not Islandora 7.x-2.x (using FedoraCommons 4.x).
 
-The intended audience for the workshop is people who have some expeience developing in PHP but not necessarily experience with Drupal.
+The intended audience for the workshop is people who have some expeience developing in PHP but not necessarily experience with Drupal. Experience with Git will be useful.
 
 In the second hour of the workshop, participants will start coding their own simple Islandora module. To prepare for this part of the workshop, make sure you have installed the [Islandora Vagrant](https://github.com/Islandora-Labs/islandora_vagrant) virtual machine on your laptop.
 
@@ -53,6 +53,8 @@ An Islandora object has properties (including id, label, createdDate, models) an
 </rdf:RDF>
 ```
 
+In practice, most objects also have two other datastreams, the "OBJ" datastream, which contains the file that the user uploaded to Islandora when the object was initially created, and the MODS datastream, which contains a MODS XML file describing the object. [MODS](http://www.loc.gov/standards/mods/) is Islandora's default descriptive metadata schema, although others can be used.
+
 An Islandora object's properties can be accessed like any other PHP object's properties. Within Islandora modules, you usually have access to either a full Islandora object, or its PID (persistent identifier). A common pattern for accessing the object is:
 
 ```php
@@ -82,7 +84,9 @@ if (!$object) {
  
  ### Content models
  
- All Islandora objects have one or more content models (most often only 1; having more than one is an edge case).
+ All Islandora objects have one or more content models (most often only 1; having more than one is an edge case). The content model is assigned to an object by the solution pack when it creates the object (via a web form or a batch ingest, for example). An object's content model tells Islandora which edit forms to use, which datastreams are required and optional, and which viewer to use when rendering the object.
+ 
+ Solution packs define the datastreams that make up an object, and those datastreams' mime types, in a "ds_composite_model.xml" file. For example, the PDF Solution Pack's [composite model file](https://github.com/Islandora/islandora_solution_pack_pdf/blob/7.x/xml/islandora_pdf_ds_composite_model.xml) shows that the OBJ datastream's mime type is "application/pdf", and that the MODS datastream is optional for objects of this content model.
 
 ## Islandora's relationship with Drupal
 
