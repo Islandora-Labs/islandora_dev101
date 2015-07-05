@@ -6,6 +6,7 @@ In the second hour of the workshop, participants will start coding their own sim
 
 ## Outline
 
+* Setting up a development environment
 * Islandora objects
 * Islandora's relationship with Drupal
 * Tuque
@@ -15,6 +16,12 @@ In the second hour of the workshop, participants will start coding their own sim
   * Islandora coding conventions
   * Islandora API
   * Hooks
+
+## Setting up a development environment
+
+### Islandora Vagrant
+### Drush
+### Some additional helpful tools
 
 ## Islandora objects
 Are fundamentally Fedora objects. Content models, structure/properties
