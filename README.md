@@ -24,13 +24,17 @@ In the second hour of the workshop, participants will start coding their own sim
 ### Some additional helpful tools
 
 ## Islandora objects
-Are fundamentally Fedora objects. Content models, structure/properties
+
+Are fundamentally [FedoraCommons objects](https://wiki.duraspace.org/display/FEDORA38/Fedora+Digital+Object+Model), [RELS-EXT, RELS-INT](https://wiki.duraspace.org/display/FEDORA38/Digital+Object+Relationships). Content models, [structure/properties](https://github.com/Islandora/islandora/wiki/Working-With-Fedora-Objects-Programmatically-Via-Tuque#working-with-existing-objects)
 
 ## Islandora's relationship with Drupal
 
 
 ## Tuque
 
+[Tuque](https://github.com/Islandora/tuque) is the PHP API that Islandora uses to communicate with FedoraCommons. 
+
+[Docs](https://github.com/Islandora/islandora/wiki/Working-With-Fedora-Objects-Programmatically-Via-Tuque)
 
 ## Islandora modules
 
@@ -114,9 +118,14 @@ Hi complexity:
 
 ### Islandora coding conventions
 
+[The official wiki page](https://github.com/Islandora/islandora/wiki/Coding-Standards)
+
+`drush dcs`
+
 
 ### Islandora API
 
+[islandora.api.php](https://github.com/Islandora/islandora/blob/7.x/islandora.api.php)
 
 ### Hooks
 
