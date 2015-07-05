@@ -20,15 +20,52 @@ In the second hour of the workshop, participants will start coding their own sim
 ## Setting up a development environment
 
 ### Islandora Vagrant
+
+The [Islandora Vagrant](https://github.com/Islandora-Labs/islandora_vagrant) virtual machine offers a full Islandora environment that is both easy to use and customizable.
+
 ### Drush
+
+[Drush](http://www.drush.org/en/master/), the Drupal shell, is an essential tool for Drupal developers and administrators. Some commands you will end up using while you develop for Islandora:
+
+* `drush cc all`: clears all of Drupal's caches.
+* `drush en module_name`: enables the module with 'module_name'. If the module is hosted on Drupal.org, will also download it and all module dependencies if necessary.
+* `drush dis module_name`: disables the module with 'module_name'.
+
+Drush is installed and ready to use on the Islandora Vagrant VM.
+
 ### Some additional helpful tools
+
+* The [Devel](https://www.drupal.org/project/devel) contrib module (also installed on the Islandora Vagrant VM)
+* The [Islandora Sample Content Generator](https://github.com/mjordan/islandora_scg) module
 
 ## Islandora objects
 
 Are fundamentally [FedoraCommons objects](https://wiki.duraspace.org/display/FEDORA38/Fedora+Digital+Object+Model), [RELS-EXT, RELS-INT](https://wiki.duraspace.org/display/FEDORA38/Digital+Object+Relationships). Content models, [structure/properties](https://github.com/Islandora/islandora/wiki/Working-With-Fedora-Objects-Programmatically-Via-Tuque#working-with-existing-objects)
 
+```php
+// If you only have a PID, you must load the corresponding Islandora object.
+$object = islandora_object_load($pid);
+if (!$object) {
+  // Logic for object load failure would go here.
+  return;
+}
+  // Logic for object load success would continue through the rest your code.
+ ```
+
 ## Islandora's relationship with Drupal
 
+Islandora uses Drupal as a web development framework and incorpoprates all of Drupal's major subsystems:
+
+* The Drupal module framework
+* The Drupal menu system
+* The hook system and most other parts of the Drupal API
+* The theme layer
+* The database access API
+* The batch and queue APIs
+* User management and access control
+* Various APIs offered by various contrib modules such as Views, Rules, Pathauto, Context, and others
+
+In fact, the only part of Drupal that Islandora doesn't use is the node subsystem. Islandora replaces Drupal nodes with Islandora objects. There are several modules that integrate Islandnora objects with Drupal nodes (for instance, [Islandora Sync](https://github.com/islandora/islandora_sync) and [Islandora Entity Bridge](https://github.com/btmash/islandora_entity_bridge)), but by default, Islandora does not create Drupal nodes corresponding to Islandora objects.
 
 ## Tuque
 
@@ -40,23 +77,34 @@ Are fundamentally [FedoraCommons objects](https://wiki.duraspace.org/display/FED
 
 ### Types
 
-* solution packs
-* integration modules
-* utility modules
+* solution packs: modules that define content models, provide add/edit forms, and viewers for various types of Islandora objects
+  * [Book Solution Pack](https://github.com/Islandora/islandora_solution_pack_book)
+  * [Compound Object Solution Pack](https://github.com/Islandora/islandora_solution_pack_compound)
+  * [PDF Solution Pack](https://github.com/Islandora/islandora_solution_pack_pdf)
+* integration modules: integrate Islandora objects with other components of the Islandora stack or with Drupal APIs
+  * [Islandora Solr Metadata](https://github.com/Islandora/islandora_solr_metadata)
+  * [Islandora XML Forms](https://github.com/Islandora/islandora_xml_forms)
+  * [Islandora XACML Editor](https://github.com/Islandora/islandora_xacml_editor)
+* utility modules: modules that perform a set of tasks related to Islanodra objects or the Islandora stack
+  * [Islandora Checksum](https://github.com/Islandora/islandora_checksum)
+  * [Islandora Batch](https://github.com/Islandora/islandora_batch)
+  * [Islandora Pathauto](https://github.com/Islandora/islandora_pathauto)
 
 ### Structure
+
+The standard approach to extending Drupal is through modules. Islandora modules follow the patterns established for Drupal modules. The most basic Islandora module contains two files, an .info file and a .module file, within a directory. Here are some examples of the structure of Islandora modules, in increasing order of complexity:
 
 Simplest:
 
 ```
 .
-├── islandora_foo.info
-├── islandora_foo.module
+├── islandora_dev101.info
+├── islandora_dev101.module
 ├── LICENSE
 ├── README.md
 ```
 
-Average complexity:
+Average complexity (Islandora FITS):
 ```
 .
 ├── build
@@ -76,7 +124,7 @@ Average complexity:
     └── islandora-fits-metadata.tpl.php
 ```
 
-Hi complexity:
+Hi complexity (Islandora Book Solution Pack):
 
 ```
 .
