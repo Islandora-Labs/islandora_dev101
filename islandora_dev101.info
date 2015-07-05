@@ -1,0 +1,6 @@
+name = "Islandora Development 101 sample module"
+description = "Module used in the Islandora Dev 101 Workshop."
+package = Islandora Tools
+dependencies[] = islandora
+core = 7.x
+configure = admin/islandora/tools/dev101
