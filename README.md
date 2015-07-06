@@ -16,6 +16,7 @@ In the second hour of the workshop, participants will start coding their own sim
   * Islandora coding conventions
   * Islandora API
   * Hooks
+* Hands-on exercise
 
 ## Setting up a development environment
 
