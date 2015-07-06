@@ -338,3 +338,7 @@ function islandora_basic_collection_islandora_object_access($op, $object, $user)
 Hooks are fired in the providing module's code via the [Drupal API function](https://api.drupal.org/api/drupal/includes!module.inc/function/module_invoke_all/7) `[module_invoke_all()]`, which iterates through all modules that implement each hook and if it finds an implementation, fires it.
 
 Islandora provides [many](https://github.com/Islandora/islandora/blob/7.x/islandora.api.php) hooks. In this workshop, we'll focus on the ones that are fired during the object add/update/purge lifecycle, and use a couple of others.
+
+## Hands-on exercise: Creating a basic notification system
+
+In this exercise, we will create a basic notification system by implementing a few Islandora hooks.
