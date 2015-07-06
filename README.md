@@ -119,6 +119,9 @@ In fact, the only part of Drupal that Islandora doesn't use is the node subsyste
   * [Book Solution Pack](https://github.com/Islandora/islandora_solution_pack_book)
   * [Compound Object Solution Pack](https://github.com/Islandora/islandora_solution_pack_compound)
   * [PDF Solution Pack](https://github.com/Islandora/islandora_solution_pack_pdf)
+* viewer modules: modules that wrap viewers for datastreams
+  * [Islandora OpenSeadragon](https://github.com/Islandora/islandora_openseadragon)
+  * [Islandora PDF.js](https://github.com/Islandora/islandora_pdfjs)
 * integration modules: integrate Islandora objects with other components of the Islandora stack or with Drupal APIs
   * [Islandora Solr Metadata](https://github.com/Islandora/islandora_solr_metadata)
   * [Islandora XML Forms](https://github.com/Islandora/islandora_xml_forms)

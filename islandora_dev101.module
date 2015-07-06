@@ -29,7 +29,7 @@ function islandora_dev101_admin_settings() {
     '#title' => t('A message to write to log files, etc.'),
     '#type' => 'textfield',
     '#size' => 100,
-    '#default_value' => variable_get('islandora_dev101_log_file_path', '')
+    '#default_value' => variable_get('islandora_dev101_message', ''),
     '#description' => t("Text of a message we will use to demonstrate various things."),
     '#maxlength' => 255,
   );
@@ -39,5 +39,17 @@ function islandora_dev101_admin_settings() {
 /**
  * Implements hook_islandora_object_ingested().
  */
-function islandora_dev101_islandora_object_ingested(FedoraObject $islandora_object) {
+function islandora_dev101_islandora_object_ingested(AbstractObject $islandora_object) {
+}
+
+/**
+ * Implements hook_islandora_object_modified().
+ */
+function islandora_dev101_islandora_object_modified(AbstractObject $islandora_object) {
+}
+
+/**
+ * Implements hook_islandora_object_purged().
+ */
+function islandora_dev101_islandora_object_purged($pid) {
 }
