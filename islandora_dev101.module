@@ -29,7 +29,7 @@ function islandora_dev101_admin_settings() {
     '#title' => t('A message to write to log files, etc.'),
     '#type' => 'textfield',
     '#size' => 100,
-    '#default_value' => variable_get('islandora_dev101_message', ''),
+    '#default_value' => variable_get('islandora_dev101_message', 'This just happened: '),
     '#description' => t("Text of a message we will use to demonstrate various things."),
     '#maxlength' => 255,
   );
