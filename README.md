@@ -425,14 +425,18 @@ Hooks are fired in the providing module's code via the [Drupal API function](htt
 
 Islandora provides many hooks. In the first exercise below, we'll implement the ones that are fired during the object add/update/purge lifecycle, and a couple of others.
 
-## Hands-on exercise 1: Detecting when objects are added, modified, or purged
+## Hands-on exercices
+
+These exercises focus on understanding and implementing Islandora hooks. Their usefulness as solutions to real problems is secondary to their ability to illustrate when hooks are fired, and what variables are available within the implemented hook functions. When we write code in exercies 1 and 3, we'll use simple functions such as `drupal_set_message()` and `dd()` to "do something". The module file `islandora_dev101.module` provides some scaffolding for the exercises.
+
+### Exercise 1: Detecting when objects are added, modified, or purged
 
 In this exercise, we will implement a few Islandora hooks that will let us display a message to the user when objects are added, modified, and deleted.
 
-## Hands-on exercise 2: Exploring islandora.api.php
+## Exercise 2: Exploring islandora.api.php
 
 In this exercise, we will take a detailed look at [islandora.api.php](https://github.com/Islandora/islandora/blob/7.x/islandora.api.php), the standard documentation for the hooks that Islandora provides to developers. We will also look at some examples in Islandora modules.
 
-## Hands-on exercise 3: Doing something with a datastream
+## Exercise 3: Doing something with a datastream
 
-In this exercise, we will implement `hook_islandora_view_object()` to write the content of an object's DC datastream to a file.
+In this exercise, we will implement a hook that will write the content of an object's DC datastream to a file every time an object is viewed.

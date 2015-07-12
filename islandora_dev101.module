@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Defines all the hooks this module implements, and some other functions.
+ * Scaffolding module for the "Islandora Development 101" workshop.
  */
 
 /**
@@ -40,16 +40,19 @@ function islandora_dev101_admin_settings() {
  * Implements hook_islandora_object_ingested().
  */
 function islandora_dev101_islandora_object_ingested(AbstractObject $islandora_object) {
+  // Do something.
 }
 
 /**
  * Implements hook_islandora_object_modified().
  */
 function islandora_dev101_islandora_object_modified(AbstractObject $islandora_object) {
+  // Do something.
 }
 
 /**
  * Implements hook_islandora_object_purged().
  */
 function islandora_dev101_islandora_object_purged($pid) {
+  // Do something.
 }
