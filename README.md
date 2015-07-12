@@ -1,6 +1,6 @@
 This 2-hour workshop will introduce Islandora objects and how they work within Drupal. It will also cover the basics of Islandora modules, and introduce Drupal hooks. The workshop doesn't cover Solr indexing, Drupal theming, writing tests for Islandora modules or access control in Islandora. We'll be covering Islandora 7.x-1.x development (that is, Islandora using FedoraCommons 3.x), not Islandora 7.x-2.x (using FedoraCommons 4.x).
 
-The intended audience for the workshop is people who have some expeience developing in PHP but not necessarily experience with Drupal. Experience with Git will be useful.
+The intended audience for the workshop is people who have some expeience developing in PHP but not necessarily experience with Drupal. Experience with Git will be useful, as will experience using text editors such as vim, nano/pico or Emacs.
 
 In the second hour of the workshop, participants will start coding their own simple Islandora module. To prepare for this part of the workshop, make sure you have installed the [Islandora Vagrant](https://github.com/Islandora-Labs/islandora_vagrant) virtual machine on your laptop.
 
@@ -45,7 +45,9 @@ Are fundamentally [FedoraCommons objects](https://wiki.duraspace.org/display/FED
 
 ### Properties and datastreams
 
-An Islandora object has properties (including id, label, createdDate, models) and datastreams, which in turn have their own properties (including label, id, checksum, content, mimetype, versionable). All Islandora object have two reserved datastreams, RELS-EXT and DC. The DC datastream contains an XML representation of the object's simple Dublin Core metadata. The RELS-EXT datastream contains an XML representation of the object's relationships with external entities and contains information on the object's content model(s), the Islandora collections it is a member of, and other information. Here is an example of a simple RELS-EXT XML:
+An Islandora object's content is stored in datastreams. The simplest way to imagine the relationship between objects and datastreams is that if an object is an email messages, datastreams are its attachments. The email has structure, but apart from the small amount of content within the message, there may be images, movies, and PDFs are associated with the message and linked to it.
+
+An Islandora object has properties (including id, label, createdDate, models) and datastreams, which in turn have their own properties (including label, id, checksum, content, mimetype, versionable). Full lists of [object properties](https://github.com/Islandora/islandora/wiki/Working-With-Fedora-Objects-Programmatically-Via-Tuque#properties) and [datastream properties](https://github.com/Islandora/islandora/wiki/Working-With-Fedora-Objects-Programmatically-Via-Tuque#properties-1) are available. All Islandora object have two reserved datastreams, RELS-EXT and DC. The DC datastream contains an XML representation of the object's simple Dublin Core metadata. The RELS-EXT datastream contains an XML representation of the object's relationships with external entities and contains information on the object's content model(s), the Islandora collections it is a member of, and other information. Here is an example of a simple RELS-EXT XML:
 
 ```xml
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:fedora="info:fedora/fedora-system:def/relations-external#" xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:islandora="http://islandora.ca/ontology/relsext#">
@@ -56,7 +58,7 @@ An Islandora object has properties (including id, label, createdDate, models) an
 </rdf:RDF>
 ```
 
-In practice, most objects also have two other datastreams, the "OBJ" datastream, which contains the file that the user uploaded to Islandora when the object was initially created, and the MODS datastream, which contains a MODS XML file describing the object. [MODS](http://www.loc.gov/standards/mods/) is Islandora's default descriptive metadata schema, although others can be used.
+In practice, most Islandora objects also have two other datastreams, the OBJ datastream, which contains the file that the user uploaded to Islandora when the object was initially created, and the MODS datastream, which contains a MODS XML file describing the object. [MODS](http://www.loc.gov/standards/mods/) is Islandora's default descriptive metadata schema, although others can be used. 
 
 An Islandora object's properties can be accessed like any other PHP object's properties. Within Islandora modules, you usually have access to either a full Islandora object, or its PID (persistent identifier). A common pattern for accessing the object is:
 
@@ -84,12 +86,14 @@ if (!$object) {
   $datastream_content = $datastream->getContent();
 }
 ```
+
+Datastream properties can be accessed in similar ways.
  
- ### Content models
+### Content models
  
- All Islandora objects have one or more content models (most often only 1; having more than one is an edge case). The content model is assigned to an object by the solution pack when it creates the object (via a web form or a batch ingest, for example). An object's content model tells Islandora which edit forms to use, which datastreams are required and optional, and which viewer to use when rendering the object.
+All Islandora objects have one or more content models (most often only one; having more than one is an edge case). The content model is assigned to an object by the solution pack when it creates the object (via a web form or a batch ingest, for example). An object's content model tells Islandora which edit forms to use, which datastreams are required and optional, and which viewer to use when rendering the object.
  
- Solution packs define the datastreams that make up an object, and those datastreams' mime types, in a "ds_composite_model.xml" file. For example, the PDF Solution Pack's [composite model file](https://github.com/Islandora/islandora_solution_pack_pdf/blob/7.x/xml/islandora_pdf_ds_composite_model.xml) shows that the OBJ datastream's mime type is "application/pdf", and that the MODS datastream is optional for objects of this content model.
+Solution packs define the datastreams that make up an object, and those datastreams' mime types, in a "ds_composite_model.xml" file. For example, the PDF Solution Pack's [composite model file](https://github.com/Islandora/islandora_solution_pack_pdf/blob/7.x/xml/islandora_pdf_ds_composite_model.xml) shows that the OBJ datastream's mime type is "application/pdf", and that the MODS datastream is optional for objects of this content model.
 
 ## Islandora's relationship with Drupal
 
@@ -113,7 +117,7 @@ In addition to Drupal, Islandora uses the following applications.
 ### Fedora Commons (a.k.a. Fedora Repository)
 [Fedora Repository](https://wiki.duraspace.org/display/FF/Downloads) provides low-level asset management services within Islandora, including storage, access control, versioning, and checksumming. Islandora's object model, described above, is inherited directly from Fedora Repository's. An important part of Fedora Commons that is used heavily in Islandora is the [Resource Index](https://wiki.duraspace.org/display/FEDORA38/Resource+Index) (abbrieviated RI), which provides a query interface for basic object properties. The Resource Index is used heavily throughout Islandora.
 
-The current version of Islandora, 7.x-1.x, uses Fedora Repository 3.x, but the Islandora community [is migrating](https://github.com/Islandora/Islandora-Fedora4-Interest-Group) to Fedora Repository version 4.x. Islandora running Fedora 4.x will have the version number 7.x-2.x.
+As mentioned earlier, the current version of Islandora, 7.x-1.x, uses Fedora Repository 3.x, but the Islandora community [is migrating](https://github.com/Islandora/Islandora-Fedora4-Interest-Group) to Fedora Repository version 4.x. Islandora running Fedora 4.x will have the version number 7.x-2.x.
 
 ### Solr
 
@@ -183,6 +187,8 @@ The standard [documentation](https://github.com/Islandora/islandora/wiki/Working
 ## Islandora modules
 
 ### Types
+
+Islandora modules can be grouped into four rough categories:
 
 * solution packs: modules that define content models, provide add/edit forms, and viewers for various types of Islandora objects
   * [Book Solution Pack](https://github.com/Islandora/islandora_solution_pack_book)
@@ -276,14 +282,24 @@ Hi complexity ([Islandora Book Solution Pack](https://github.com/Islandora/islan
 
 ### Islandora coding conventions
 
-[The official wiki page](https://github.com/Islandora/islandora/wiki/Coding-Standards)
+Like any quality open source software application and community, Islandora uses a set of well-documented coding conventions. [The official wiki page](https://github.com/Islandora/islandora/wiki/Coding-Standards) provides explanations and examples. When you are coding Islandora modules, you should get in the habbit of running the following command within your module directory:
 
 `drush dcs`
+
+This command runs executes PHP_CodeSniffer, the standard PHP source code style analysis tool, to enforce Drupal coding standards, and if it finds any, will provide a detailed report.
+
+The most common errors many developers make are:
+
+* improper indentation (use 2 spaces for each level)
+* white space at the end of lines (this is not allowed)
+* missing file and function comments.
+
+Many Islanodra developers configure their text editors and IDEs to use PHP_CodeSniffer.
 
 
 ### Islandora API
 
-[islandora.api.php](https://github.com/Islandora/islandora/blob/7.x/islandora.api.php)
+The core Islandora module provides an API that module developers can use. This API includes a number of Drupal hooks, documented at [islandora.api.php](https://github.com/Islandora/islandora/blob/7.x/islandora.api.php), and a number of helper functions, many of which are defined in various .inc files within the [Islandora module's includes directory](https://github.com/Islandora/islandora/tree/7.x/includes).
 
 ### Hooks
 
