@@ -43,7 +43,7 @@ You run drush commands from anywhere within the Drupal installation directory. D
 
 ## Islandora objects
 
-Islandora objects are the basic structural component of content within an Islandora repository. Objects contain datastreams, and are containied within parent objects, typically Islandora collections. Islandora objects are [FedoraCommons objects](https://wiki.duraspace.org/display/FEDORA38/Fedora+Digital+Object+Model) that follow specific conventions surrounding properties, datastreams, and content models.
+Islandora objects are the basic structural component of content within an Islandora repository. Objects contain datastreams, and are containied within parent objects, typically Islandora collections but in some cases as children of compound objects. Islandora objects are [FedoraCommons objects](https://wiki.duraspace.org/display/FEDORA38/Fedora+Digital+Object+Model) that follow specific conventions surrounding properties, datastreams, and content models.
 
 ### Properties and datastreams
 
