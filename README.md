@@ -341,7 +341,7 @@ Hooks are fired in the providing module's code via the [Drupal API function](htt
 
 Islandora provides [many](https://github.com/Islandora/islandora/blob/7.x/islandora.api.php) hooks. In the first exercise below, we'll implement the ones that are fired during the object add/update/purge lifecycle, and a couple of others.
 
-## Hands-on exercise 1: Displaying messages
+## Hands-on exercise 1: Detecting when objects are added, modified, or purged
 
 In this exercise, we will implement a few Islandora hooks that will let us display a message to the user when objects are added, modified, and deleted.
 
@@ -349,6 +349,6 @@ In this exercise, we will implement a few Islandora hooks that will let us displ
 
 In this exercise, we will take a detailed look at islandora.api.php, the standard documentation for the hooks that Islandora provides to developers. We will also look at some examples in Islandora modules.
 
-## Hands-on exercise 3: Do something with a datastream
+## Hands-on exercise 3: Doing something with a datastream
 
-In this exercise, we will implement `hook_islandora_datastream_modified()` to display a message to the user when she has modified the MODS datastream.
+In this exercise, we will implement `hook_islandora_view_object()` to write the content of an object's DC datastream to a file.
