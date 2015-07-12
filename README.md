@@ -4,9 +4,12 @@ This 2-hour workshop will introduce Islandora objects and how they work within D
 
 The intended audience for the workshop is people who have some expeience developing in PHP but not necessarily experience with Drupal. Experience with Git will be useful, as will experience using text editors such as vim, nano/pico or Emacs.
 
-In the second hour of the workshop, participants will start coding their own simple Islandora module. To prepare for this part of the workshop, make sure you have installed the [Islandora Vagrant](https://github.com/Islandora-Labs/islandora_vagrant) virtual machine on your laptop, and that you have an ssh client on it as well.
+In the second hour of the workshop, participants will start coding their own simple Islandora module. To prepare for this part of the workshop, make sure you have the following installed on your laptop:
 
-## Outline
+* you have installed the [Islandora Vagrant](https://github.com/Islandora-Labs/islandora_vagrant) virtual machine
+* you have an ssh client
+
+The workshop will cover the following topics:
 
 * Setting up a development environment
 * Islandora objects
@@ -18,7 +21,7 @@ In the second hour of the workshop, participants will start coding their own sim
   * Islandora coding conventions
   * Islandora API
   * Hooks
-* Hands-on exercise
+* Hands-on exercises
 
 ## Setting up a development environment
 
