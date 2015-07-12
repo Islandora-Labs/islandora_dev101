@@ -2,7 +2,7 @@ This 2-hour workshop will introduce Islandora objects and how they work within D
 
 The intended audience for the workshop is people who have some expeience developing in PHP but not necessarily experience with Drupal. Experience with Git will be useful, as will experience using text editors such as vim, nano/pico or Emacs.
 
-In the second hour of the workshop, participants will start coding their own simple Islandora module. To prepare for this part of the workshop, make sure you have installed the [Islandora Vagrant](https://github.com/Islandora-Labs/islandora_vagrant) virtual machine on your laptop.
+In the second hour of the workshop, participants will start coding their own simple Islandora module. To prepare for this part of the workshop, make sure you have installed the [Islandora Vagrant](https://github.com/Islandora-Labs/islandora_vagrant) virtual machine on your laptop, and that you have an ssh client on it as well.
 
 ## Outline
 
@@ -41,7 +41,7 @@ You run drush commands from anywhere within the Drupal installation directory. D
 
 ## Islandora objects
 
-Are fundamentally [FedoraCommons objects](https://wiki.duraspace.org/display/FEDORA38/Fedora+Digital+Object+Model), [RELS-EXT, RELS-INT](https://wiki.duraspace.org/display/FEDORA38/Digital+Object+Relationships). Content models, [structure/properties](https://github.com/Islandora/islandora/wiki/Working-With-Fedora-Objects-Programmatically-Via-Tuque#working-with-existing-objects)
+Islandora objects are the basic structural component of content within an Islandora repository. Objects contain datastreams, and are containied within parent objects, typically Islandora collections. Islandora objects are [FedoraCommons objects](https://wiki.duraspace.org/display/FEDORA38/Fedora+Digital+Object+Model) that follow specific conventions surrounding properties, datastreams, and content models.
 
 ### Properties and datastreams
 
@@ -112,7 +112,7 @@ In fact, the only part of Drupal that Islandora doesn't use is the node subsyste
 
 ## Islandora's other major components
 
-In addition to Drupal, Islandora uses the following applications.
+In addition to Drupal, Islandora uses the following applications and libraries.
 
 ### Fedora Commons (a.k.a. Fedora Repository)
 [Fedora Repository](https://wiki.duraspace.org/display/FF/Downloads) provides low-level asset management services within Islandora, including storage, access control, versioning, and checksumming. Islandora's object model, described above, is inherited directly from Fedora Repository's. An important part of Fedora Commons that is used heavily in Islandora is the [Resource Index](https://wiki.duraspace.org/display/FEDORA38/Resource+Index) (abbrieviated RI), which provides a query interface for basic object properties. The Resource Index is used heavily throughout Islandora.
@@ -205,6 +205,8 @@ Islandora modules can be grouped into four rough categories:
   * [Islandora Checksum](https://github.com/Islandora/islandora_checksum)
   * [Islandora Batch](https://github.com/Islandora/islandora_batch)
   * [Islandora Pathauto](https://github.com/Islandora/islandora_pathauto)
+
+These categories are for overview purposes only; there are no code-level or structural requirements for the various types. Two exceptions are that 1) solution packs generally provide colleciton policy and MODS forms definition files, and implement some specific functions that register these; and 2) viewer modules implement `hook_islandora_viewer_info()`.
 
 ### Structure
 
@@ -299,7 +301,7 @@ Many Islanodra developers configure their text editors and IDEs to use PHP_CodeS
 
 ### Islandora API
 
-The core Islandora module provides an API that module developers can use. This API includes a number of Drupal hooks, documented at [islandora.api.php](https://github.com/Islandora/islandora/blob/7.x/islandora.api.php), and a number of helper functions, many of which are defined in various .inc files within the [Islandora module's includes directory](https://github.com/Islandora/islandora/tree/7.x/includes).
+The core Islandora module provides an API that module developers can use. This API includes a number of Drupal hooks, documented at [islandora.api.php](https://github.com/Islandora/islandora/blob/7.x/islandora.api.php), and a number of helper functions, many of which are defined in various .inc files within the [Islandora module's includes directory](https://github.com/Islandora/islandora/tree/7.x/includes). `islandora_object_load()`, which is defined in the islandora.module file, is an example of these helper functions.
 
 ### Hooks
 
@@ -427,7 +429,9 @@ Islandora provides many hooks. In the first exercise below, we'll implement the 
 
 ## Hands-on exercices
 
-These exercises focus on understanding and implementing Islandora hooks. Their usefulness as solutions to real problems is secondary to their ability to illustrate when hooks are fired, and what variables are available within the implemented hook functions. When we write code in exercies 1 and 3, we'll use simple functions such as `drupal_set_message()` and `dd()` to "do something". The module file `islandora_dev101.module` provides some scaffolding for the exercises. Exercise 2 will get us looking at the documentation for hooks and at examples implementations in other modules.
+These exercises focus on understanding and implementing Islandora hooks. Their usefulness as solutions to real problems is secondary to their ability to illustrate when hooks are fired, and what variables are available within the implemented hook functions.
+
+When we write code in exercies 1 and 3, we'll use simple functions such as `drupal_set_message()` and `dd()` to "do something". The module file `islandora_dev101.module` provides some scaffolding for the exercises. Exercise 2 is not a coding exercise, but it will get us looking at the documentation for hooks and at examples implementations in other modules.
 
 ### Exercise 1: Detecting when objects are added, modified, or purged
 
