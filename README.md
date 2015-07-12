@@ -1,3 +1,5 @@
+## Overview
+
 This 2-hour workshop will introduce Islandora objects and how they work within Drupal. It will also cover the basics of Islandora modules, and introduce Drupal hooks. The workshop doesn't cover Solr indexing, Drupal theming, writing tests for Islandora modules or access control in Islandora. We'll be covering Islandora 7.x-1.x development (that is, Islandora using FedoraCommons 3.x), not Islandora 7.x-2.x (using FedoraCommons 4.x).
 
 The intended audience for the workshop is people who have some expeience developing in PHP but not necessarily experience with Drupal. Experience with Git will be useful, as will experience using text editors such as vim, nano/pico or Emacs.
