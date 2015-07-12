@@ -1,13 +1,13 @@
 ## Overview
 
-This 2-hour workshop will introduce Islandora objects and how they work within Drupal. It will also cover the basics of Islandora modules, and introduce Drupal hooks. The workshop doesn't cover Solr indexing, Drupal theming, writing tests for Islandora modules or access control in Islandora. We'll be covering Islandora 7.x-1.x development (that is, Islandora using FedoraCommons 3.x), not Islandora 7.x-2.x (using FedoraCommons 4.x).
+This 2-hour workshop will introduce Islandora objects and how they work within Drupal. It will also cover the basics of Islandora modules, and introduce Drupal/Islandora hooks. The workshop does not cover Solr indexing, Drupal theming, writing tests for Islandora modules or access control in Islandora. We'll be covering Islandora 7.x-1.x development (that is, Islandora using FedoraCommons 3.x), not Islandora 7.x-2.x (using FedoraCommons 4.x).
 
-The intended audience for the workshop is people who have some expeience developing in PHP but not necessarily experience with Drupal. Experience with Git will be useful, as will experience using text editors such as vim, nano/pico or Emacs.
+The intended audience for the workshop is people who have some expeience developing in PHP but not necessarily experience with Drupal. Experience using text editors such as vim, nano/pico or Emacs will be very useful, as will experience using Git.
 
 In the second hour of the workshop, participants will start coding their own simple Islandora module. To prepare for this part of the workshop, make sure you have the following installed on your laptop:
 
-* you have installed the [Islandora Vagrant](https://github.com/Islandora-Labs/islandora_vagrant) virtual machine
-* you have an ssh client
+* the [Islandora Vagrant](https://github.com/Islandora-Labs/islandora_vagrant) virtual machine
+* an ssh client
 
 The workshop will cover the following topics:
 
@@ -76,7 +76,6 @@ if ($object) {
   $my_label = $object->label;
   // Or you can set its properties.
   $object->label = 'New label';
-  // Or you can set its properties.
 }
  ```
  
