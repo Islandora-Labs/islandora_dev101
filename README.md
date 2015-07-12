@@ -70,11 +70,14 @@ An Islandora object's properties can be accessed like any other PHP object's pro
 ```php
 // If you only have a PID, you must load the corresponding Islandora object.
 $object = islandora_object_load($pid);
-if (!$object) {
-  // Logic for object load failure would go here.
-  return;
+if ($object) {
+  // You can get the object's properties.
+  $my_pid = $object->id;
+  $my_label = $object->label;
+  // Or you can set its properties.
+  $object->label = 'New label';
+  // Or you can set its properties.
 }
-  // Logic for object load success would continue through the rest your code.
  ```
  
  To access the object's datastreams, you can use this pattern:
@@ -86,13 +89,13 @@ if (!$object) {
  
  ```php
  foreach ($object as $datastream) {
-  strtoupper($datastream->id);
+  // Datastream properties can be gotten and set in ways similar to objects' properties.
+  $ds_label = $datastream->label;
   $datastream->label = "new label";
-  $datastream_content = $datastream->getContent();
+  $datastream_content = $datastream->content;
 }
 ```
 
-Datastream properties can be accessed in similar ways.
  
 ### Content models
  
