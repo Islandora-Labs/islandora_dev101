@@ -9,7 +9,7 @@ In the second hour of the workshop, participants will start coding their own sim
 * Setting up a development environment
 * Islandora objects
 * Islandora's relationship with Drupal
-* Tuque
+* Islandora other major components
 * Islandora modules
   * Types
   * Structure
@@ -106,11 +106,79 @@ Islandora uses Drupal as a web development framework and incorpoprates all of Dr
 
 In fact, the only part of Drupal that Islandora doesn't use is the node subsystem. Islandora replaces Drupal nodes with Islandora objects. There are several modules that integrate Islandnora objects with Drupal nodes (for instance, [Islandora Sync](https://github.com/islandora/islandora_sync) and [Islandora Entity Bridge](https://github.com/btmash/islandora_entity_bridge)), but by default, Islandora does not create Drupal nodes corresponding to Islandora objects.
 
-## Tuque
+## Islandora's other major components
 
-[Tuque](https://github.com/Islandora/tuque) is the PHP API that Islandora uses to communicate with FedoraCommons. 
+In addition to Drupal, Islandora uses the following applications.
 
-[Docs](https://github.com/Islandora/islandora/wiki/Working-With-Fedora-Objects-Programmatically-Via-Tuque)
+### Fedora Commons (a.k.a. Fedora Repository)
+[Fedora Repository](https://wiki.duraspace.org/display/FF/Downloads) provides low-level asset management services within Islandora, including storage, access control, versioning, and checksumming. Islandora's object model, described above, is inherited directly from Fedora Repository's. An important part of Fedora Commons that is used heavily in Islandora is the [Resource Index](https://wiki.duraspace.org/display/FEDORA38/Resource+Index) (abbrieviated RI), which provides a query interface for basic object properties. The Resource Index is used heavily throughout Islandora.
+
+The current version of Islandora, 7.x-1.x, uses Fedora Repository 3.x, but the Islandora community [is migrating](https://github.com/Islandora/Islandora-Fedora4-Interest-Group) to Fedora Repository version 4.x. Islandora running Fedora 4.x will have the version number 7.x-2.x.
+
+### Solr
+
+[Apache Solr](http://lucene.apache.org/solr/) provides search and retrieval functionality for metadata contained in Islandora objects' XML datastreams, and for full text of books, newspapers, and other types of content. Solr extracts queriable content from datastreams using a third-party application called the [Generic Search Service](https://wiki.duraspace.org/display/FCSVCS/Generic+Search+Service+2.7) (or more commonly, gsearch).
+
+The general difference between Fedora's Resource Index and Solr is that the RI is used for querying object properties, while Solr is used for querying datastream content. For example, when an Islandora module needs to find all of the pages in a book, it will query the RI; when a user wants to find all books that contain the keywords "dog" and "sled", Islandora queries Solr.
+
+### Tuque
+
+[Tuque](https://github.com/Islandora/tuque) is the PHP API that Islandora uses to communicate with FedoraCommons. Tuque is basically a wrapper around Fedora's REST interface. Tuque is included by the core Islandora module, which makes its functionality available within the Drupal environment for all other modules. Module developers don't need to include it in their code themselves.
+
+Tuque is completely usable outside of the Islandora codebase as a standalone API library. Here is a sample script that connects to the Fedora repository and issues a query against the Resource Index to get a list of all objects that are children of a specific collection.
+
+```php
+<?php
+/**
+ * Sample tuque script that queries the Fedora Resource Index to get a list of
+ * all objects that are children of the islandora:sp_basic_image_collection.
+ */
+
+$fedora_user = 'fedoraAdmin';
+$fedora_pass = 'fedoraAdmin';
+$fedora_url = 'http://localhost:8080/fedora';
+$collection = 'islandora:sp_basic_image_collection';
+
+/**
+ * Load Tuque API.
+ */
+include_once 'tuque/Datastream.php';
+include_once 'tuque/FedoraApi.php';
+include_once 'tuque/FedoraApiSerializer.php';
+include_once 'tuque/Object.php';
+include_once 'tuque/RepositoryConnection.php';
+include_once 'tuque/Cache.php';
+include_once 'tuque/RepositoryException.php';
+include_once 'tuque/Repository.php';
+include_once 'tuque/FedoraRelationships.php';
+
+// Connect to the Fedora repo.
+try {
+  $connection = new RepositoryConnection($fedora_url, $fedora_user, $fedora_pass);
+}
+catch (Exception $e) {
+  print $e->getMessage();
+}
+
+$api = new FedoraApi($connection);
+$cache = new SimpleCache();
+$repository = new FedoraRepository($api, $cache);
+
+// Query the rindex to get all the objects that have a 'isMemberOfCollection'
+// relationship with the specified collection.
+$ri_query = 'select $object from <#ri>
+  where  $object <fedora-rels-ext:isMemberOfCollection> <info:fedora/' . $collection . '>';
+  $members = $repository->ri->itqlQuery($ri_query, 'unlimited');
+
+print "Members of the '$collection' collection\n\n";
+
+// Printn out their PIDs.
+foreach ($members as $member) {
+  print $member['object']['value'] . "\n";
+}
+```
+
+The standard [documentation](https://github.com/Islandora/islandora/wiki/Working-With-Fedora-Objects-Programmatically-Via-Tuque) for Tuque is essential reading and reference material for Islandora developers.
 
 ## Islandora modules
 
@@ -339,7 +407,7 @@ function islandora_basic_collection_islandora_object_access($op, $object, $user)
 
 Hooks are fired in the providing module's code via the [Drupal API function](https://api.drupal.org/api/drupal/includes!module.inc/function/module_invoke_all/7) `module_invoke_all()`, which iterates through all modules that implement each hook and if it finds an implementation, fires it.
 
-Islandora provides [many](https://github.com/Islandora/islandora/blob/7.x/islandora.api.php) hooks. In the first exercise below, we'll implement the ones that are fired during the object add/update/purge lifecycle, and a couple of others.
+Islandora provides many hooks. In the first exercise below, we'll implement the ones that are fired during the object add/update/purge lifecycle, and a couple of others.
 
 ## Hands-on exercise 1: Detecting when objects are added, modified, or purged
 
@@ -347,7 +415,7 @@ In this exercise, we will implement a few Islandora hooks that will let us displ
 
 ## Hands-on exercise 2: Exploring islandora.api.php
 
-In this exercise, we will take a detailed look at islandora.api.php, the standard documentation for the hooks that Islandora provides to developers. We will also look at some examples in Islandora modules.
+In this exercise, we will take a detailed look at [islandora.api.php](https://github.com/Islandora/islandora/blob/7.x/islandora.api.php), the standard documentation for the hooks that Islandora provides to developers. We will also look at some examples in Islandora modules.
 
 ## Hands-on exercise 3: Doing something with a datastream
 
