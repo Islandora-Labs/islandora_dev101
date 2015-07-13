@@ -454,9 +454,9 @@ In this exercise, we will implement a few Islandora hooks that will let us displ
 
 In this exercise, we will take a detailed look at [islandora.api.php](https://github.com/Islandora/islandora/blob/7.x/islandora.api.php), the standard documentation for the hooks that Islandora provides to developers. We will also look at some examples in Islandora modules.
 
-1. Look up the entry for `hook_islandora_object_alter()` in the API documentation
+1. Look up the entry for `hook_islandora_object_alter()` in the API documentation.
 2. Find an implementation of this hook in an Islandora module.
-3. Repeat for `hook_islandora_datastream_modified()`, `hook_islandora_ingest_steps()`, and `hook_islandora_derivative()`.
+3. Repeat steps 1 and 2 for `hook_islandora_datastream_modified()`, `hook_islandora_ingest_steps()`, and `hook_islandora_derivative()`.
 
 ### Exercise 3: Doing something with a datastream
 
