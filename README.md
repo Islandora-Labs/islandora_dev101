@@ -351,9 +351,7 @@ function hook_islandora_object_access($op, $object, $user) {
 
 The entry provides the function signature and the parameter/return documentation, plus (in some cases) some sample code. The function signature begins with the word 'hook' but when we implement the hook in our modules, we replace that with the name of the module. This "magic" naming convention is how Drupal knows to fire the hook implementations.
 
-Here are three implementations of the hook:
-
-from islandora.module itself:
+Here are three implementations of the hook from islandora.module itself:
 
 ```php
 /**
