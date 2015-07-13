@@ -465,3 +465,4 @@ In this exercise, we will implement a hook that will write the content of an obj
 1. Find a suitable Islandora hook that will fire when an object is viewed. Your instructor will have some suggestions.
 2. Open the islandora_dev101.module file in an editor and add your implementation of the hook.
 3. Access the DC datastream's content using `$object['DC']->content` and print it to a file using code similar to what you wrote in exercise 1.
+4. As a bonus, print the content of the RELS-EXT datastream.
