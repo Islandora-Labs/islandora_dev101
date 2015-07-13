@@ -116,7 +116,7 @@ Islandora uses Drupal as a web development framework and incorpoprates all of Dr
 * User management and access control
 * Various APIs offered by various contrib modules such as Views, Rules, Pathauto, Context, and others
 
-In fact, the only part of Drupal that Islandora doesn't use is the [entity/node subsystem](https://www.drupal.org/node/1261744). Islandora replaces Drupal nodes with Islandora objects. There are several modules that integrate Islandnora objects with Drupal nodes (for instance, [Islandora Sync](https://github.com/islandora/islandora_sync) and [Islandora Entity Bridge](https://github.com/btmash/islandora_entity_bridge)), but by default, Islandora does not create Drupal nodes corresponding to Islandora objects.
+In fact, the only part of Drupal that Islandora doesn't use is the [entity/node subsystem](https://www.drupal.org/node/1261744). Islandora replaces Drupal nodes with Islandora objects. There are several modules that integrate Islandora objects with Drupal nodes (for instance, [Islandora Sync](https://github.com/islandora/islandora_sync) and [Islandora Entity Bridge](https://github.com/btmash/islandora_entity_bridge)), but by default, Islandora does not create Drupal nodes corresponding to Islandora objects.
 
 ## Islandora's other major components
 
