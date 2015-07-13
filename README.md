@@ -52,7 +52,7 @@ Islandora objects are the basic structural component of content within an Island
 
 An Islandora object's content is stored in datastreams. The simplest way to imagine the relationship between objects and datastreams is that if an object is an email messages, datastreams are its attachments. The email has structure, but apart from the small amount of content within the message, there may be images, movies, and PDFs are associated with the message and linked to it.
 
-An Islandora object has properties (including id, label, createdDate, models) and datastreams, which in turn have their own properties (including label, id, checksum, content, mimetype, versionable). Full lists of [object properties](https://github.com/Islandora/islandora/wiki/Working-With-Fedora-Objects-Programmatically-Via-Tuque#properties) and [datastream properties](https://github.com/Islandora/islandora/wiki/Working-With-Fedora-Objects-Programmatically-Via-Tuque#properties-1) are available. All Islandora object have two reserved datastreams, RELS-EXT and DC. The DC datastream contains an XML representation of the object's simple Dublin Core metadata. The RELS-EXT datastream contains an XML representation of the object's relationships with external entities and contains information on the object's content model(s), the Islandora collections it is a member of, and other information. Here is an example of a simple RELS-EXT XML:
+An Islandora object has properties (including id, label, createdDate, models) and datastreams, which in turn have their own properties (including label, id, checksum, content, mimetype, versionable). Full lists of [object properties](https://github.com/Islandora/islandora/wiki/Working-With-Fedora-Objects-Programmatically-Via-Tuque#properties) and [datastream properties](https://github.com/Islandora/islandora/wiki/Working-With-Fedora-Objects-Programmatically-Via-Tuque#properties-1) are available. All Islandora objects have two reserved datastreams, RELS-EXT and DC. The DC datastream contains an XML representation of the object's simple Dublin Core metadata. The RELS-EXT datastream contains an XML representation of the object's relationships with external entities and contains information on the object's content model(s), the Islandora collections it is a member of, and other information. Here is an example of a simple RELS-EXT XML:
 
 ```xml
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:fedora="info:fedora/fedora-system:def/relations-external#" xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:islandora="http://islandora.ca/ontology/relsext#">
@@ -76,6 +76,7 @@ if ($object) {
   $my_label = $object->label;
   // Or you can set its properties.
   $object->label = 'New label';
+  $relationships = $object->relationships;
 }
  ```
  
@@ -98,7 +99,7 @@ if ($object) {
  
 ### Content models
  
-All Islandora objects have one or more content models (most often only one; having more than one is an edge case). The content model is assigned to an object by the solution pack when it creates the object (via a web form or a batch ingest, for example). An object's content model tells Islandora which edit forms to use, which datastreams are required and optional, and which viewer to use when rendering the object.
+All Islandora objects have one or more content models (most often only one; having more than one is an edge case). The content model is assigned to an object by the solution pack when it creates the object (via a web form or a batch ingest, for example). An object's content model tells Islandora which edit forms to use, which datastreams are required and optional, and which viewer to use when rendering the object. You can access an object's content models using the `$object->models` property.
  
 Solution packs define the datastreams that make up an object, and those datastreams' mime types, in a "ds_composite_model.xml" file. For example, the PDF Solution Pack's [composite model file](https://github.com/Islandora/islandora_solution_pack_pdf/blob/7.x/xml/islandora_pdf_ds_composite_model.xml) shows that the OBJ datastream's mime type is "application/pdf", and that the MODS datastream is optional for objects of this content model.
 
@@ -115,13 +116,13 @@ Islandora uses Drupal as a web development framework and incorpoprates all of Dr
 * User management and access control
 * Various APIs offered by various contrib modules such as Views, Rules, Pathauto, Context, and others
 
-In fact, the only part of Drupal that Islandora doesn't use is the node subsystem. Islandora replaces Drupal nodes with Islandora objects. There are several modules that integrate Islandnora objects with Drupal nodes (for instance, [Islandora Sync](https://github.com/islandora/islandora_sync) and [Islandora Entity Bridge](https://github.com/btmash/islandora_entity_bridge)), but by default, Islandora does not create Drupal nodes corresponding to Islandora objects.
+In fact, the only part of Drupal that Islandora doesn't use is the [entity/node subsystem](https://www.drupal.org/node/1261744). Islandora replaces Drupal nodes with Islandora objects. There are several modules that integrate Islandnora objects with Drupal nodes (for instance, [Islandora Sync](https://github.com/islandora/islandora_sync) and [Islandora Entity Bridge](https://github.com/btmash/islandora_entity_bridge)), but by default, Islandora does not create Drupal nodes corresponding to Islandora objects.
 
 ## Islandora's other major components
 
 In addition to Drupal, Islandora uses the following applications and libraries.
 
-### Fedora Commons (a.k.a. Fedora Repository)
+### Fedora Commons (a.k.a. Fedora Repository, a.k.a. FCREPO)
 [Fedora Repository](https://wiki.duraspace.org/display/FF/Downloads) provides low-level asset management services within Islandora, including storage, access control, versioning, and checksumming. Islandora's object model, described above, is inherited directly from Fedora Repository's. An important part of Fedora Commons that is used heavily in Islandora is the [Resource Index](https://wiki.duraspace.org/display/FEDORA38/Resource+Index) (abbrieviated RI), which provides a query interface for basic object properties. The Resource Index is used heavily throughout Islandora.
 
 As mentioned earlier, the current version of Islandora, 7.x-1.x, uses Fedora Repository 3.x, but the Islandora community [is migrating](https://github.com/Islandora/Islandora-Fedora4-Interest-Group) to Fedora Repository version 4.x. Islandora running Fedora 4.x will have the version number 7.x-2.x.
@@ -134,7 +135,7 @@ The general difference between Fedora's Resource Index and Solr is that the RI i
 
 ### Tuque
 
-[Tuque](https://github.com/Islandora/tuque) is the PHP API that Islandora uses to communicate with FedoraCommons. Tuque is basically a wrapper around Fedora's REST interface. Tuque is included by the core Islandora module, which makes its functionality available within the Drupal environment for all other modules. Module developers don't need to include it in their code themselves.
+[Tuque](https://github.com/Islandora/tuque) is the PHP API that Islandora uses to communicate with FedoraCommons. Tuque is basically a wrapper around Fedora's REST interface. Tuque is `included` by the core Islandora module, which makes its functionality available within the Drupal environment for all other modules. Module developers don't need to `include` it in their code themselves.
 
 Tuque is completely usable outside of the Islandora codebase as a standalone API library. Here is a sample script that connects to the Fedora repository and issues a query against the Resource Index to get a list of all objects that are children of a specific collection.
 
