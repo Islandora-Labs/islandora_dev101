@@ -446,10 +446,22 @@ When we write code in exercies 1 and 3, we'll use simple functions such as `drup
 
 In this exercise, we will implement a few Islandora hooks that will let us display a message to the user when objects are added, modified, and deleted.
 
+1. Open the islandora_dev101.module file in an editor and add either `drupal_set_message()` or `dd()` statements where it says "// Do something" in the three function signatures (that is, hook implementations) at the bottom of the file. If you prefer to write non-Drupal PHP code (e.g., file_put_content(), etc.) instead of using Drupal functions, that's fine.
+2. Your code should print a property of the Islandora object, such as ID or owner.
+3. As a bonus, configure your own message in the module's admin settings and then retrieve that message within your functions using `variable_get('islandora_dev101_message', 'This just happened: ')`. Print the message along with the object property.
+
 ### Exercise 2: Exploring islandora.api.php
 
 In this exercise, we will take a detailed look at [islandora.api.php](https://github.com/Islandora/islandora/blob/7.x/islandora.api.php), the standard documentation for the hooks that Islandora provides to developers. We will also look at some examples in Islandora modules.
 
+1. Look up the entry for `hook_islandora_object_alter()` in the API documentation
+2. Find an implementation of this hook in an Islandora module.
+3. Repeat for `hook_islandora_datastream_modified()`, `hook_islandora_ingest_steps()`, and `hook_islandora_derivative()`.
+
 ### Exercise 3: Doing something with a datastream
 
 In this exercise, we will implement a hook that will write the content of an object's DC datastream to a file every time an object is viewed.
+
+1. Find a suitable Islandora hook that will fire when an object is viewed. Your instructor will have some suggestions.
+2. Open the islandora_dev101.module file in an editor and add your implementation of the hook.
+3. Access the DC datastream's content using `$object['DC']->content` and print it to a file using code similar to what you wrote in exercise 1.
