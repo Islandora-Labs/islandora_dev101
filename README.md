@@ -8,6 +8,7 @@ In the second hour of the workshop, participants will start coding their own sim
 
 * the [Islandora Vagrant](https://github.com/Islandora-Labs/islandora_vagrant) virtual machine
 * an ssh client
+* an scp client if you prefer to work in a graphical text editor on your laptop
 
 The workshop will cover the following topics:
 
