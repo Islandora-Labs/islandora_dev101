@@ -117,7 +117,7 @@ Islandora uses Drupal as a web development framework and incorpoprates all of Dr
 * User management and access control
 * Various APIs offered by various contrib modules such as Views, Rules, Pathauto, Context, and others
 
-In fact, the only part of Drupal that Islandora doesn't use is the [entity/node subsystem](https://www.drupal.org/node/1261744). Islandora replaces Drupal nodes with Islandora objects. There are several modules that integrate Islandnora objects with Drupal nodes (for instance, [Islandora Sync](https://github.com/islandora/islandora_sync) and [Islandora Entity Bridge](https://github.com/btmash/islandora_entity_bridge)), but by default, Islandora does not create Drupal nodes corresponding to Islandora objects.
+In fact, the only part of Drupal that Islandora doesn't use is the [entity/node subsystem](https://www.drupal.org/node/1261744). Islandora replaces Drupal nodes with Islandora objects. There are several modules that integrate Islandora objects with Drupal nodes (for instance, [Islandora Sync](https://github.com/islandora/islandora_sync) and [Islandora Entity Bridge](https://github.com/btmash/islandora_entity_bridge)), but by default, Islandora does not create Drupal nodes corresponding to Islandora objects.
 
 ## Islandora's other major components
 
@@ -316,9 +316,9 @@ The core Islandora module provides an API that module developers can use. This A
 
 A Drupal (and Islandora) hook is a special type of function that is fired at a predefined time in the execution of a page request. They are "defined" by a module and "implemented" by other modules. In this way, hooks lets a Drupal module add functionality that can be used by another module. Unlike a function, which you call to get an expected return value, a hook lets you write a function that always gets called by Drupal at a specific time. More information on hooks is available from [drupal.org](https://www.drupal.org/node/292).
 
-For example, hook_islandora_object_access() is defined by the Islandora module, but is used by many other modules to determine whether a user is allowed to perform a specific action on an object.
+For example, `hook_islandora_object_access()` is defined by the Islandora module, but is used by many other modules to determine whether a user is allowed to perform a specific action on an object.
 
-Here is the entry in [islandora.api.php](https://github.com/Islandora/islandora/blob/7.x/islandora.api.php) for hook_islandora_object_access():
+Here is the entry in [islandora.api.php](https://github.com/Islandora/islandora/blob/7.x/islandora.api.php) for `hook_islandora_object_access()`:
 
 ```php
 /**
@@ -350,11 +350,9 @@ function hook_islandora_object_access($op, $object, $user) {
 }
 ```
 
-The entry provides the function signature and the parameter/return documentationH, plus (in some caes) some sample code. The function signature begins with the word 'hook' but when we implement the hook in our modules, we replace that with the name of the module. This "magic" naming convention is how Drupal knows to fire the hook implementations.
+The entry provides the function signature and the parameter/return documentation, plus (in some cases) some sample code. The function signature begins with the word 'hook' but when we implement the hook in our modules, we replace that with the name of the module. This "magic" naming convention is how Drupal knows to fire the hook implementations.
 
-Here are three implementations of the hook:
-
-from islandora.module itself:
+Here are three implementations of the hook from islandora.module itself:
 
 ```php
 /**
