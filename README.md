@@ -305,7 +305,7 @@ The most common errors many developers make are:
 * white space at the end of lines (this is not allowed)
 * missing file and function comments.
 
-Many Islanodra developers configure their text editors and IDEs to use PHP_CodeSniffer.
+Many Islandora developers configure their text editors and IDEs to use PHP_CodeSniffer.
 
 
 ### Islandora API
@@ -444,9 +444,9 @@ When we write code in exercies 1 and 3, we'll use simple functions such as `drup
 
 In this exercise, we will implement a few Islandora hooks that will let us display a message to the user when objects are added, modified, and deleted.
 
-1. Open the islandora_dev101.module file in an editor and add either `drupal_set_message()` or `dd()` statements where it says "// Do something" in the three function signatures (that is, hook implementations) at the bottom of the file. If you prefer to write non-Drupal PHP code (e.g., file_put_content(), etc.) instead of using Drupal functions, that's fine.
+1. Open the islandora_dev101.module file in an editor and add either `drupal_set_message()` or `dd()` statements where it says "// Do something" in the three function signatures (that is, hook implementations) at the bottom of the file. If you prefer to write non-Drupal PHP code (e.g., file_put_contents(), etc.) instead of using Drupal functions, that's fine.
 2. Your code should print a property of the Islandora object, such as ID or owner.
-3. As a bonus, configure your own message in the module's admin settings and then retrieve that message within your functions using `variable_get('islandora_dev101_message', 'This just happened: ')`. Print the message along with the object property.
+3. As a bonus, configure your own message in the module's admin settings form and then retrieve that message within your functions using `variable_get('islandora_dev101_message', 'This just happened: ')`. Print the message along with the object property.
 
 ### Exercise 2: Exploring islandora.api.php
 
