@@ -442,9 +442,9 @@ When we write code in exercies 1 and 3, we'll use simple functions such as `drup
 
 ### Exercise 1: Detecting when objects are added, modified, or purged
 
-In this exercise, we will implement a few Islandora hooks that will let us display a message to the user when objects are added, modified, and deleted.
+In this exercise, we will implement a few Islandora hooks that will let us display a message to the user when objects are added, modified, and deleted, or write the message to a file.
 
-1. Open the islandora_dev101.module file in an editor and add either `drupal_set_message()` or `dd()` statements where it says "// Do something" in the three function signatures (that is, hook implementations) at the bottom of the file. If you prefer to write non-Drupal PHP code (e.g., file_put_contents(), etc.) instead of using Drupal functions, that's fine.
+1. Open the islandora_dev101.module file in an editor and add either `drupal_set_message()` to display a message to the user or `dd()` to write the message to a file where it says "// Do something" in the three function signatures (that is, hook implementations) at the bottom of the file. If you use `dd()`, the file written to will be `/tmp/drupal_debug.txt`.
 2. Your code should print a property of the Islandora object, such as ID or owner.
 3. As a bonus, configure your own message in the module's admin settings form and then retrieve that message within your functions using `variable_get('islandora_dev101_message', 'This just happened: ')`. Print the message along with the object property.
 
@@ -464,7 +464,7 @@ In this exercise, we will implement a hook that will write the content of an obj
 
 1. Find a suitable Islandora hook that will fire when an object is viewed. Your instructor will have some suggestions.
 2. Open the islandora_dev101.module file in an editor and add your implementation of the hook.
-3. Access the DC datastream's content using `$object['DC']->content` and print it to a file using code similar to what you wrote in exercise 1.
+3. Access the DC datastream's content using `$object['DC']->content` and print it to a file using the `dd()` function. If you prefer to write non-Drupal PHP code (e.g., file_put_contents()) to write the file instead of using `dd()`, feel free to do so.
 4. As a bonus, print the content of the RELS-EXT datastream.
 
 Some [sample implementations](https://gist.github.com/mjordan/4ae7724d5b3ffe38207f) are available.
