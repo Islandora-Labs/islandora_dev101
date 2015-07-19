@@ -47,13 +47,28 @@ You run drush commands from anywhere within the Drupal installation directory. D
 
 ## Islandora objects
 
-Islandora objects are the basic structural component of content within an Islandora repository. Objects contain datastreams, and are containied within parent objects, typically Islandora collections but in some cases as children of compound objects. Islandora objects are [FedoraCommons objects](https://wiki.duraspace.org/display/FEDORA38/Fedora+Digital+Object+Model) that follow specific conventions surrounding properties, datastreams, and content models.
+Islandora objects are the basic structural component of content within an Islandora repository. Objects contain properties and datastreams (described below), and are containied within parent objects, typically Islandora collections but in some cases as children of compound objects. Islandora objects are a subclass of [FedoraCommons objects](https://wiki.duraspace.org/display/FEDORA38/Fedora+Digital+Object+Model) that follow specific conventions surrounding properties, datastreams, and content models.
 
 ### Properties and datastreams
 
-An Islandora object is made up of properties and datastreams. One way to imagine the relationship between objects, their properties, and their datastreams is to compare an object to an email message. Where an email message has a subject line and date sent, an Islandora object has the properties "label" and "created date". Where an email message may have attachments (images, movies, etc.), objects may have datastreams (also image, movies, and so on). The analogy breaks down with the email's message body; and Islandora object has no direct counterpart.
+An Islandora object is made up of properties and datastreams. One way to imagine the relationship between objects, their properties, and their datastreams is to compare an object to an email message. Where an email message has a subject line and date sent, an Islandora object has the properties "label" and "created date". Where an email message may have attachments (image files, video files, etc.), objects may have datastreams (also image files, video files, and so on). The analogy breaks down with the email's message body; and Islandora object has no direct counterpart.
 
-An Islandora object's properties include id, label, createdDate, models. Datastreams have their own properties, including label, id, checksum, content, mimetype, versionable. Full lists of [object properties](https://github.com/Islandora/islandora/wiki/Working-With-Fedora-Objects-Programmatically-Via-Tuque#properties) and [datastream properties](https://github.com/Islandora/islandora/wiki/Working-With-Fedora-Objects-Programmatically-Via-Tuque#properties-1) are available. All Islandora objects have two reserved datastreams, RELS-EXT and DC. The DC datastream contains an XML representation of the object's simple Dublin Core metadata. The RELS-EXT datastream contains an XML representation of the object's relationships with external entities and contains information on the object's content model(s), the Islandora collections it is a member of, and other information. Here is an example of a simple RELS-EXT XML:
+An Islandora object's properties include 
+ * id
+ * label
+ * createdDate
+ * owner
+ * models
+
+Datastreams have their own properties, including
+ *id
+ *label
+ *checksum
+ *content
+ *mimetype
+ *versionable
+ 
+Full lists of [object properties](https://github.com/Islandora/islandora/wiki/Working-With-Fedora-Objects-Programmatically-Via-Tuque#properties) and [datastream properties](https://github.com/Islandora/islandora/wiki/Working-With-Fedora-Objects-Programmatically-Via-Tuque#properties-1) are available. All Islandora objects have two reserved datastreams, RELS-EXT and DC. The DC datastream contains an XML representation of the object's simple Dublin Core metadata. The RELS-EXT datastream contains an XML representation of the object's relationships with external entities and contains information on the object's content model(s), the Islandora collections it is a member of, and other information. Here is an example of a simple RELS-EXT XML:
 
 ```xml
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:fedora="info:fedora/fedora-system:def/relations-external#" xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:islandora="http://islandora.ca/ontology/relsext#">
@@ -84,6 +99,7 @@ if ($object) {
  To access the object's datastreams, you can use this pattern:
  
  ```php
+ // $dsid is the datastream ID.
  $datastream = islandora_datastream_load($dsid, $object);
  ```
  or
