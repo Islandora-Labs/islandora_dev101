@@ -103,7 +103,7 @@ if ($object) {
  $datastream = islandora_datastream_load($dsid, $object);
  ```
  or
-```
+```php
 // 'DC' is the datastream ID.
 $object['DC']->content;
 ```
