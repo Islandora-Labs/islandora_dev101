@@ -448,6 +448,8 @@ In this exercise, we will implement a few Islandora hooks that will let us displ
 2. Your code should print a property of the Islandora object, such as ID or owner.
 3. As a bonus, configure your own message in the module's admin settings form and then retrieve that message within your functions using `variable_get('islandora_dev101_message', 'This just happened: ')`. Print the message along with the object property.
 
+A [sample implementation](https://gist.github.com/mjordan/99fac083970ea43528c6) is available.
+
 ### Exercise 2: Exploring islandora.api.php
 
 In this exercise, we will take a detailed look at [islandora.api.php](https://github.com/Islandora/islandora/blob/7.x/islandora.api.php), the standard documentation for the hooks that Islandora provides to developers. We will also look at some examples in Islandora modules.
@@ -464,3 +466,5 @@ In this exercise, we will implement a hook that will write the content of an obj
 2. Open the islandora_dev101.module file in an editor and add your implementation of the hook.
 3. Access the DC datastream's content using `$object['DC']->content` and print it to a file using code similar to what you wrote in exercise 1.
 4. As a bonus, print the content of the RELS-EXT datastream.
+
+Some [sample implementations](https://gist.github.com/mjordan/4ae7724d5b3ffe38207f) are available.
