@@ -54,14 +54,14 @@ Islandora objects are the basic structural component of content within an Island
 An Islandora object is made up of properties and datastreams. One way to imagine the relationship between objects, their properties, and their datastreams is to compare an object to an email message. Where an email message has a subject line and date sent, an Islandora object has the properties "label" and "created date". Where an email message may have attachments (image files, video files, etc.), objects may have datastreams (also image files, video files, and so on). The analogy breaks down with the email's message body; and Islandora object has no direct counterpart.
 
 An Islandora object's properties include 
- * id
+ * id (commonly known as its PID, for "persistent ID")
  * label
  * createdDate
  * owner
  * models
 
 Datastreams have their own properties, including
- * id
+ * id (commonly known as its DSID, for "datastream ID")
  * label
  * checksum
  * content
