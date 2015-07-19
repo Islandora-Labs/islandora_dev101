@@ -61,12 +61,12 @@ An Islandora object's properties include
  * models
 
 Datastreams have their own properties, including
- *id
- *label
- *checksum
- *content
- *mimetype
- *versionable
+ * id
+ * label
+ * checksum
+ * content
+ * mimetype
+ * versionable
  
 Full lists of [object properties](https://github.com/Islandora/islandora/wiki/Working-With-Fedora-Objects-Programmatically-Via-Tuque#properties) and [datastream properties](https://github.com/Islandora/islandora/wiki/Working-With-Fedora-Objects-Programmatically-Via-Tuque#properties-1) are available. All Islandora objects have two reserved datastreams, RELS-EXT and DC. The DC datastream contains an XML representation of the object's simple Dublin Core metadata. The RELS-EXT datastream contains an XML representation of the object's relationships with external entities and contains information on the object's content model(s), the Islandora collections it is a member of, and other information. Here is an example of a simple RELS-EXT XML:
 
