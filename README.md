@@ -51,9 +51,9 @@ Islandora objects are the basic structural component of content within an Island
 
 ### Properties and datastreams
 
-An Islandora object's content is stored in datastreams. The simplest way to imagine the relationship between objects and datastreams is that if an object is an email messages, datastreams are its attachments. The email has structure, but apart from the small amount of content within the message, there may be images, movies, and PDFs are associated with the message and linked to it.
+An Islandora object is made up of properties and datastreams. One way to imagine the relationship between objects, their properties, and their datastreams is to compare an object to an email message. Where an email message has a subject line and date sent, an Islandora object has the properties "label" and "created date". Where an email message may have attachments (images, movies, etc.), objects may have datastreams (also image, movies, and so on). The analogy breaks down with the email's message body; and Islandora object has no direct counterpart.
 
-An Islandora object has properties (including id, label, createdDate, models) and datastreams, which in turn have their own properties (including label, id, checksum, content, mimetype, versionable). Full lists of [object properties](https://github.com/Islandora/islandora/wiki/Working-With-Fedora-Objects-Programmatically-Via-Tuque#properties) and [datastream properties](https://github.com/Islandora/islandora/wiki/Working-With-Fedora-Objects-Programmatically-Via-Tuque#properties-1) are available. All Islandora objects have two reserved datastreams, RELS-EXT and DC. The DC datastream contains an XML representation of the object's simple Dublin Core metadata. The RELS-EXT datastream contains an XML representation of the object's relationships with external entities and contains information on the object's content model(s), the Islandora collections it is a member of, and other information. Here is an example of a simple RELS-EXT XML:
+An Islandora object's properties include id, label, createdDate, models. Datastreams have their own properties, including label, id, checksum, content, mimetype, versionable. Full lists of [object properties](https://github.com/Islandora/islandora/wiki/Working-With-Fedora-Objects-Programmatically-Via-Tuque#properties) and [datastream properties](https://github.com/Islandora/islandora/wiki/Working-With-Fedora-Objects-Programmatically-Via-Tuque#properties-1) are available. All Islandora objects have two reserved datastreams, RELS-EXT and DC. The DC datastream contains an XML representation of the object's simple Dublin Core metadata. The RELS-EXT datastream contains an XML representation of the object's relationships with external entities and contains information on the object's content model(s), the Islandora collections it is a member of, and other information. Here is an example of a simple RELS-EXT XML:
 
 ```xml
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:fedora="info:fedora/fedora-system:def/relations-external#" xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:islandora="http://islandora.ca/ontology/relsext#">
@@ -87,7 +87,11 @@ if ($object) {
  $datastream = islandora_datastream_load($dsid, $object);
  ```
  or
- 
+```
+// 'DC' is the datastream ID.
+$object['DC']->content;
+```
+ or
  ```php
  foreach ($object as $datastream) {
   // Datastream properties can be gotten and set in ways similar to objects' properties.
@@ -96,11 +100,10 @@ if ($object) {
   $datastream_content = $datastream->content;
 }
 ```
-
  
 ### Content models
  
-All Islandora objects have one or more content models (most often only one; having more than one is an edge case). The content model is assigned to an object by the solution pack when it creates the object (via a web form or a batch ingest, for example). An object's content model tells Islandora which edit forms to use, which datastreams are required and optional, and which viewer to use when rendering the object. You can access an object's content models using the `$object->models` property.
+All Islandora objects have one or more content models (usually only one; having more than one is an edge case). The content model is assigned to an object by the solution pack when it creates the object (via a web form or a batch ingest, for example). An object's content model tells Islandora which add/edit metadata form to use, which datastreams are required and optional, and which viewer to use when rendering the object. You can access an object's content models using the `$object->models` property.
  
 Solution packs define the datastreams that make up an object, and those datastreams' mime types, in a "ds_composite_model.xml" file. For example, the PDF Solution Pack's [composite model file](https://github.com/Islandora/islandora_solution_pack_pdf/blob/7.x/xml/islandora_pdf_ds_composite_model.xml) shows that the OBJ datastream's mime type is "application/pdf", and that the MODS datastream is optional for objects of this content model.
 
@@ -108,14 +111,15 @@ Solution packs define the datastreams that make up an object, and those datastre
 
 Islandora uses Drupal as a web development framework and incorpoprates all of Drupal's major subsystems:
 
-* The Drupal module framework
-* The Drupal menu system
-* The hook system and most other parts of the Drupal API
+* The module framework
+* The menu system
+* The hook system
+* Helper functions provided by the Drupal API
 * The theme layer
 * The database access API
 * The batch and queue APIs
 * User management and access control
-* Various APIs offered by various contrib modules such as Views, Rules, Pathauto, Context, and others
+* APIs offered by contrib modules such as Views, Rules, Pathauto, Context, and others
 
 In fact, the only part of Drupal that Islandora doesn't use is the [entity/node subsystem](https://www.drupal.org/node/1261744). Islandora replaces Drupal nodes with Islandora objects. There are several modules that integrate Islandora objects with Drupal nodes (for instance, [Islandora Sync](https://github.com/islandora/islandora_sync) and [Islandora Entity Bridge](https://github.com/btmash/islandora_entity_bridge)), but by default, Islandora does not create Drupal nodes corresponding to Islandora objects.
 
@@ -303,6 +307,7 @@ The most common errors many developers make are:
 
 * improper indentation (use 2 spaces for each level)
 * white space at the end of lines (this is not allowed)
+* white space at the end of files (not allowed)
 * missing file and function comments.
 
 Many Islandora developers configure their text editors and IDEs to use PHP_CodeSniffer.
