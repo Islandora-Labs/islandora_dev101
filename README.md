@@ -144,9 +144,13 @@ In fact, the only part of Drupal that Islandora doesn't use is the [entity/node 
 In addition to Drupal, Islandora uses the following applications and libraries.
 
 ### Fedora Commons (a.k.a. Fedora Repository, a.k.a. FCREPO)
-[Fedora Repository](https://wiki.duraspace.org/display/FF/Downloads) provides low-level asset management services within Islandora, including storage, access control, versioning, and checksumming. Islandora's object model, described above, is inherited directly from Fedora Repository's. An important part of Fedora Commons that is used heavily in Islandora is the [Resource Index](https://wiki.duraspace.org/display/FEDORA38/Resource+Index) (abbrieviated RI), which provides a query interface for basic object properties. The Resource Index is used heavily throughout Islandora.
+[Fedora Repository](https://wiki.duraspace.org/display/FF/Downloads) provides low-level asset management services within Islandora, including storage, access control, versioning, and checksumming. Islandora's object model, described above, is inherited directly from Fedora Repository's.
 
 As mentioned earlier, the current version of Islandora, 7.x-1.x, uses Fedora Repository 3.x, but the Islandora community [is migrating](https://github.com/Islandora/Islandora-Fedora4-Interest-Group) to Fedora Repository version 4.x. Islandora running Fedora 4.x will have the version number 7.x-2.x.
+
+An important part of Fedora Commons 3.x that is used heavily throughout Islandora is the [Resource Index](https://wiki.duraspace.org/display/FEDORA38/Resource+Index) (abbrieviated "RI"), which provides [SPARQL](https://en.wikipedia.org/wiki/SPARQL) and [iTQL](http://docs.mulgara.org/itqlcommands/index.html) query interfaces for basic object attributes. Attributes available in the RI are derived from the content of the DC, RELS-EXT, and RELS-INT datastreams, and also include some properties available in the object's FOXML.
+
+FOXML is an XML representation of a Fedora Commons object. In other words, an object's FOXML file contains the object's properties and information about its datastreams. An example of an object's FOXML is [available here](https://wiki.duraspace.org/display/FEDORA35/FOXML+Reference+Example). Islandora doesn't typically modify an object's FOXML, but in some cases it parses it to retrieve information that is not easily accessible through other means. FOXML can be used to move objects between instances of Fedora Commons repositories.
 
 ### Solr
 
