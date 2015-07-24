@@ -79,9 +79,18 @@ Full lists of [object properties](https://github.com/Islandora/islandora/wiki/Wo
 </rdf:RDF>
 ```
 
-In practice, most Islandora objects also have two other datastreams, the OBJ datastream, which contains the file that the user uploaded to Islandora when the object was initially created, and the MODS datastream, which contains a MODS XML file describing the object. [MODS](http://www.loc.gov/standards/mods/) is Islandora's default descriptive metadata schema, although others can be used. 
+In practice, most Islandora objects also have two other datastreams, the OBJ datastream, which contains the file that the user uploaded to Islandora when the object was initially created, and the MODS datastream, which contains a MODS XML file describing the object. [MODS](http://www.loc.gov/standards/mods/) is Islandora's default descriptive metadata schema, although others can be used.
 
-An Islandora object's properties can be accessed like any other PHP object's properties. Within Islandora modules, you usually have access to either a full Islandora object, or its PID (persistent identifier). A common pattern for accessing the object is:
+Datastreams can be structurally related to an object in four different ways. These ways are referred to as "control groups" and are:
+
+* Inline XML content (abbreviated "X")
+* Managed content (abbreviated "M")
+* Externally referenced content (abbreviated "E")
+* Redirect referenced content (abbreviated "R")
+
+Inline XML content is stored within an object's FOXML (more information on FOXML is provided below). Managed content is stored as files within Fedora (datastreams of this control group are the rough equivalent of attachments in our email analogy). These two type of datastreams are the most common in Islandora, but E and R datastreams can also be used. Externally referenced content is stored outside of Fedora and it identified within Fedora by a URL; when Fedora needs the datastream's content, it retrieves it from the URL. Redirect referenced content is also identified by a URL, but the datastream's content is never retieved by Fedora; instead, it just redirects users to the URL.
+
+An Islandora object's properties and datastream properties can be accessed like any other PHP object's properties. Within Islandora modules, you usually have access to either a full Islandora object, or its PID (persistent identifier). A common pattern for accessing the object is:
 
 ```php
 // If you only have a PID, you must load the corresponding Islandora object.
@@ -150,7 +159,7 @@ As mentioned earlier, the current version of Islandora, 7.x-1.x, uses Fedora Rep
 
 An important part of Fedora Commons 3.x that is used heavily throughout Islandora is the [Resource Index](https://wiki.duraspace.org/display/FEDORA38/Resource+Index) (abbrieviated "RI"), which provides [SPARQL](https://en.wikipedia.org/wiki/SPARQL) and [iTQL](http://docs.mulgara.org/itqlcommands/index.html) query interfaces for basic object attributes. Attributes available in the RI are derived from the content of the DC, RELS-EXT, and RELS-INT datastreams, and also include some properties available in the object's FOXML.
 
-FOXML is an XML representation of a Fedora Commons object. In other words, an object's FOXML file contains the object's properties and information about its datastreams. An example of an object's FOXML is [available here](https://wiki.duraspace.org/display/FEDORA35/FOXML+Reference+Example). Islandora doesn't typically modify an object's FOXML, but in some cases it parses it to retrieve information that is not easily accessible through other means. FOXML can be used to move objects between instances of Fedora Commons repositories.
+FOXML is an XML representation of the [Fedora object model](https://wiki.duraspace.org/display/FEDORA38/Fedora+Digital+Object+Model). In other words, a Fedora (and Islandora) object's FOXML file contains the object's properties and information about its datastreams. An example of an object's FOXML is [available here](https://wiki.duraspace.org/display/FEDORA35/FOXML+Reference+Example). Islandora doesn't typically modify an object's FOXML, but in some cases it parses it to retrieve information that is not easily accessible through other means. FOXML can be used to move objects between instances of Fedora Commons repositories.
 
 ### Solr
 
@@ -160,7 +169,7 @@ The general difference between Fedora's Resource Index and Solr is that the RI i
 
 ### Tuque
 
-[Tuque](https://github.com/Islandora/tuque) is the PHP API that Islandora uses to communicate with FedoraCommons. Tuque is basically a wrapper around Fedora's REST interface. Tuque is `included` by the core Islandora module, which makes its functionality available within the Drupal environment for all other modules. Module developers don't need to `include` it in their code themselves.
+[Tuque](https://github.com/Islandora/tuque) is the PHP API that Islandora uses to communicate with Fedora Commons. Tuque is basically a wrapper around Fedora's REST interface. Tuque is `included` by the core Islandora module, which makes its functionality available within the Drupal environment for all other modules. Module developers don't need to `include` it in their code themselves.
 
 Tuque is completely usable outside of the Islandora codebase as a standalone API library. Here is a sample script that connects to the Fedora repository and issues a query against the Resource Index to get a list of all objects that are children of a specific collection.
 
