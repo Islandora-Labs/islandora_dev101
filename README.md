@@ -134,7 +134,7 @@ Solution packs define the datastreams that make up an object, and those datastre
 
 ## Islandora's relationship with Drupal
 
-Islandora uses Drupal as a web development framework and incorpoprates all of Drupal's major subsystems:
+Islandora uses Drupal as a web development framework and incorporates all of Drupal's major subsystems:
 
 * The module framework
 * The menu system
@@ -146,7 +146,7 @@ Islandora uses Drupal as a web development framework and incorpoprates all of Dr
 * User management and access control
 * APIs offered by contrib modules such as Views, Rules, Pathauto, Context, and others
 
-In fact, the only part of Drupal that Islandora doesn't use is the [entity/node subsystem](https://www.drupal.org/node/1261744). Islandora replaces Drupal nodes with Islandora objects. There are several modules that integrate Islandora objects with Drupal nodes (for instance, [Islandora Sync](https://github.com/islandora/islandora_sync) and [Islandora Entity Bridge](https://github.com/btmash/islandora_entity_bridge)), but by default, Islandora does not create Drupal nodes corresponding to Islandora objects.
+In fact, the only part of Drupal that Islandora doesn't use is the [entity/node subsystem](https://www.drupal.org/node/1261744). Islandora replaces Drupal entities with Islandora objects. There are several modules that integrate Islandora objects with Drupal entities (for instance, [Islandora Sync](https://github.com/islandora/islandora_sync) and [Islandora Entity Bridge](https://github.com/btmash/islandora_entity_bridge)), but by default, Islandora does not create Drupal nodes corresponding to Islandora objects.
 
 ## Islandora's other major components
 
