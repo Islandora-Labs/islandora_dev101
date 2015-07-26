@@ -1,6 +1,6 @@
 ## Overview
 
-This 2-hour workshop will introduce Islandora objects and how they work within Drupal. It will also cover the basics of Islandora modules, and introduce Drupal/Islandora hooks. The workshop does not cover Solr indexing, Drupal theming, writing tests for Islandora modules or access control in Islandora. We'll be covering Islandora 7.x-1.x development (that is, Islandora using FedoraCommons 3.x), not Islandora 7.x-2.x (using FedoraCommons 4.x).
+This 2-hour workshop will introduce Islandora objects and how they work within Drupal. It will also cover the basics of Islandora modules, and introduce Drupal/Islandora hooks. The workshop does not cover Solr indexing, Drupal theming, writing tests for Islandora modules or access control in Islandora. It will cover Islandora 7.x-1.x development (that is, Islandora using Fedora Commons 3.x), not Islandora 7.x-2.x (using Fedora Commons 4.x).
 
 The intended audience for the workshop is people who have some expeience developing in PHP but not necessarily experience with Drupal. Experience using text editors such as vim, nano/pico or Emacs will be very useful, as will experience using Git.
 
@@ -32,7 +32,7 @@ The [Islandora Vagrant](https://github.com/Islandora-Labs/islandora_vagrant) vir
 
 ### Drush
 
-[Drush](http://www.drush.org/en/master/), the Drupal shell, is an essential tool for Drupal developers and administrators. Some commands you will end up using while you develop for Islandora:
+[Drush](http://www.drush.org/en/master/), the Drupal shell, is an essential tool for Drupal developers and administrators. Some commands you will want to use while you develop for Islandora:
 
 * `drush cc all`: clears all of Drupal's caches.
 * `drush en module_name`: enables the module with 'module_name'. If the module is hosted on Drupal.org, will also download it and all module dependencies if necessary.
@@ -47,11 +47,11 @@ You run drush commands from anywhere within the Drupal installation directory. D
 
 ## Islandora objects
 
-Islandora objects are the basic structural component of content within an Islandora repository. Objects contain properties and datastreams (described below), and are containied within parent objects, typically Islandora collections but in some cases as children of compound objects. Islandora objects are a subclass of [FedoraCommons objects](https://wiki.duraspace.org/display/FEDORA38/Fedora+Digital+Object+Model) that follow specific conventions surrounding properties, datastreams, and content models.
+Islandora objects are the basic structural component of content within an Islandora repository. Objects contain properties and datastreams (described below), and are containied within parent objects, typically Islandora collections but in some cases as children of compound objects. Islandora objects are a subclass of [Fedora Commons objects](https://wiki.duraspace.org/display/FEDORA38/Fedora+Digital+Object+Model) that follow specific conventions surrounding datastreams and content models.
 
 ### Properties and datastreams
 
-An Islandora object is made up of properties and datastreams. One way to imagine the relationship between objects, their properties, and their datastreams is to compare an object to an email message. Where an email message has a subject line and date sent, an Islandora object has the properties "label" and "created date". Where an email message may have attachments (image files, video files, etc.), objects may have datastreams (also image files, video files, and so on). The analogy breaks down with the email's message body; and Islandora object has no direct counterpart.
+An Islandora object is made up of properties and datastreams. One way to imagine the relationship between objects, their properties, and their datastreams is to compare an Islandora object to an email message. Where an email message has a subject line and date sent, an Islandora object has the properties "label" and "created date". Where an email message may have attachments (image files, video files, etc.), Islandora objects may have datastreams (also image files, video files, and so on). The analogy breaks down with the email's message body; an Islandora object has no direct counterpart.
 
 An Islandora object's properties include 
  * id (commonly known as its PID, for "persistent ID")
@@ -97,11 +97,11 @@ An Islandora object's properties and datastream properties can be accessed like 
 $object = islandora_object_load($pid);
 if ($object) {
   // You can get the object's properties.
-  $my_pid = $object->id;
-  $my_label = $object->label;
+  $pid = $object->id;
+  $label = $object->label;
   // Or you can set its properties.
   $object->label = 'New label';
-  $relationships = $object->relationships;
+  $object->relationships = $relationships;
 }
  ```
  
@@ -121,16 +121,16 @@ $object['DC']->content;
  foreach ($object as $datastream) {
   // Datastream properties can be gotten and set in ways similar to objects' properties.
   $ds_label = $datastream->label;
-  $datastream->label = "new label";
+  $datastream->label = "New label";
   $datastream_content = $datastream->content;
 }
 ```
  
 ### Content models
  
-All Islandora objects have one or more content models (usually only one; having more than one is an edge case). The content model is assigned to an object by the solution pack when it creates the object (via a web form or a batch ingest, for example). An object's content model tells Islandora which add/edit metadata form to use, which datastreams are required and optional, and which viewer to use when rendering the object. You can access an object's content models using the `$object->models` property.
+All Islandora objects have one or more content models (usually only one; having more than one is not common). The content model is assigned to an object by a solution pack when it creates the object (via a web form or a batch ingest, for example). An object's content model tells Islandora which add/edit metadata form to use, which datastreams are required and optional, and which viewer to use when rendering the object. You can access an object's content models using the `$object->models` property.
  
-Solution packs define the datastreams that make up an object, and those datastreams' mime types, in a "ds_composite_model.xml" file. For example, the PDF Solution Pack's [composite model file](https://github.com/Islandora/islandora_solution_pack_pdf/blob/7.x/xml/islandora_pdf_ds_composite_model.xml) shows that the OBJ datastream's mime type is "application/pdf", and that the MODS datastream is optional for objects of this content model.
+Solution packs define some compontents of a content model - the datastreams that make up an object, and those datastreams' mime types, in a "ds_composite_model.xml" file. For example, the PDF Solution Pack's [composite model file](https://github.com/Islandora/islandora_solution_pack_pdf/blob/7.x/xml/islandora_pdf_ds_composite_model.xml) shows that the OBJ datastream's mime type is "application/pdf", and that the MODS datastream is optional for objects of this content model.
 
 ## Islandora's relationship with Drupal
 
@@ -153,7 +153,7 @@ In fact, the only part of Drupal that Islandora doesn't use is the [entity/node 
 In addition to Drupal, Islandora uses the following applications and libraries.
 
 ### Fedora Commons (a.k.a. Fedora Repository, a.k.a. FCREPO)
-[Fedora Repository](https://wiki.duraspace.org/display/FF/Downloads) provides low-level asset management services within Islandora, including storage, access control, versioning, and checksumming. Islandora's object model, described above, is inherited directly from Fedora Repository's.
+[Fedora Repository](https://wiki.duraspace.org/display/FF/Downloads) provides low-level asset management services within Islandora, including storage, access control, versioning, and checksumming. Islandora's object model, described above, is inherited directly from Fedora Repository's object model.
 
 As mentioned earlier, the current version of Islandora, 7.x-1.x, uses Fedora Repository 3.x, but the Islandora community [is migrating](https://github.com/Islandora/Islandora-Fedora4-Interest-Group) to Fedora Repository version 4.x. Islandora running Fedora 4.x will have the version number 7.x-2.x.
 
@@ -161,17 +161,11 @@ An important part of Fedora Commons 3.x that is used heavily throughout Islandor
 
 FOXML is an XML representation of the [Fedora object model](https://wiki.duraspace.org/display/FEDORA38/Fedora+Digital+Object+Model). In other words, a Fedora (and Islandora) object's FOXML file contains the object's properties and information about its datastreams. An example of an object's FOXML is [available here](https://wiki.duraspace.org/display/FEDORA35/FOXML+Reference+Example). Islandora doesn't typically modify an object's FOXML, but in some cases it parses it to retrieve information that is not easily accessible through other means. FOXML can be used to move objects between instances of Fedora Commons repositories.
 
-### Solr
-
-[Apache Solr](http://lucene.apache.org/solr/) provides search and retrieval functionality for metadata contained in Islandora objects' XML datastreams, and for full text of books, newspapers, and other types of content. Solr extracts queriable content from datastreams using a third-party application called the [Generic Search Service](https://wiki.duraspace.org/display/FCSVCS/Generic+Search+Service+2.7) (or more commonly, gsearch).
-
-The general difference between Fedora's Resource Index and Solr is that the RI is used for querying object properties, while Solr is used for querying datastream content. For example, when an Islandora module needs to find all of the pages in a book, it will query the RI; when a user wants to find all books that contain the keywords "dog" and "sled", Islandora queries Solr.
-
 ### Tuque
 
 [Tuque](https://github.com/Islandora/tuque) is the PHP API that Islandora uses to communicate with Fedora Commons. Tuque is basically a wrapper around Fedora's REST interface. Tuque is `included` by the core Islandora module, which makes its functionality available within the Drupal environment for all other modules. Module developers don't need to `include` it in their code themselves.
 
-Tuque is completely usable outside of the Islandora codebase as a standalone API library. Here is a sample script that connects to the Fedora repository and issues a query against the Resource Index to get a list of all objects that are children of a specific collection.
+Tuque can be used outside of the Islandora codebase as a standalone API library. Here is a sample script that connects to the Fedora repository and issues a query against the Resource Index to get a list of all objects that are members of a specific collection.
 
 ```php
 <?php
@@ -226,21 +220,27 @@ foreach ($members as $member) {
 
 The standard [documentation](https://github.com/Islandora/islandora/wiki/Working-With-Fedora-Objects-Programmatically-Via-Tuque) for Tuque is essential reading and reference material for Islandora developers.
 
+### Solr
+
+[Apache Solr](http://lucene.apache.org/solr/) provides search and retrieval functionality for metadata contained in Islandora objects' XML datastreams, and for full text of books, newspapers, and other types of content. Solr extracts queriable content from datastreams using a third-party application called the [Generic Search Service](https://wiki.duraspace.org/display/FCSVCS/Generic+Search+Service+2.7) (or more commonly, gsearch).
+
+The general difference between Fedora's Resource Index and Solr is that the RI is used for querying object properties, while Solr is used for querying datastream content. For example, when an Islandora module needs to find all of the pages in a book, it will query the RI, because that is where the object's "isPageOf" relationship is stored; when a user wants to find all books that contain the keywords "dog" and "sled", Islandora queries Solr, because the OCR datastreams of book pages are indexed in Solr.
+
 ## Islandora modules
 
 ### Types
 
 Islandora modules can be grouped into four rough categories:
 
-* solution packs: modules that define content models, provide add/edit forms, and viewers for various types of Islandora objects
+* solution packs: modules that define content models, provide add/edit forms, and build display pages for various types of Islandora objects
   * [Book Solution Pack](https://github.com/Islandora/islandora_solution_pack_book)
   * [Compound Object Solution Pack](https://github.com/Islandora/islandora_solution_pack_compound)
   * [PDF Solution Pack](https://github.com/Islandora/islandora_solution_pack_pdf)
-* viewer modules: modules that wrap viewers for datastreams
+* viewer modules: modules that provide rich viewers for datastreams
   * [Islandora OpenSeadragon](https://github.com/Islandora/islandora_openseadragon)
   * [Islandora PDF.js](https://github.com/Islandora/islandora_pdfjs)
-* integration modules: integrate Islandora objects with other components of the Islandora stack or with Drupal APIs
-  * [Islandora Solr Metadata](https://github.com/Islandora/islandora_solr_metadata)
+* integration modules: modules that integrate Islandora objects with other components of the Islandora stack or with Drupal APIs
+  * [Islandora Solr Views](https://github.com/Islandora/islandora_solr_views)
   * [Islandora XML Forms](https://github.com/Islandora/islandora_xml_forms)
   * [Islandora XACML Editor](https://github.com/Islandora/islandora_xacml_editor)
 * utility modules: modules that perform a set of tasks related to Islanodra objects or the Islandora stack
@@ -248,7 +248,7 @@ Islandora modules can be grouped into four rough categories:
   * [Islandora Batch](https://github.com/Islandora/islandora_batch)
   * [Islandora Pathauto](https://github.com/Islandora/islandora_pathauto)
 
-These categories are for overview purposes only; there are no code-level or structural requirements for the various types. Two exceptions are that 1) solution packs generally provide colleciton policy and MODS forms definition files, and implement some specific functions that register these; and 2) viewer modules implement `hook_islandora_viewer_info()`.
+These categories are for overview purposes only; there are no code-level or structural requirements for the various types. Two exceptions are that 1) solution packs generally provide collection policy and MODS forms definition files, and implement some specific functions that register these; and 2) viewer modules implement `hook_islandora_viewer_info()`.
 
 ### Structure
 
@@ -264,7 +264,7 @@ Simplest (the module that you'll be playing with during this workshop):
 ├── README.md
 ```
 
-Average complexity ([Islandora FITS](https://github.com/Islandora/islandora_fits)):
+LICENSE and README.md are not required for the module to work but should always be present as a convention. An example of a module of average complexity is [Islandora FITS](https://github.com/Islandora/islandora_fits):
 ```
 .
 ├── build
@@ -284,7 +284,7 @@ Average complexity ([Islandora FITS](https://github.com/Islandora/islandora_fits
     └── islandora-fits-metadata.tpl.php
 ```
 
-Hi complexity ([Islandora Book Solution Pack](https://github.com/Islandora/islandora_solution_pack_book)):
+A module of greater complexity is [Islandora Book Solution Pack](https://github.com/Islandora/islandora_solution_pack_book):
 
 ```
 .
@@ -337,7 +337,7 @@ The most common errors many developers make are:
 * improper indentation (use 2 spaces for each level)
 * white space at the end of lines (this is not allowed)
 * white space at the end of files (not allowed)
-* missing file and function comments.
+* missing or improper file and function comments.
 
 Many Islandora developers configure their text editors and IDEs to use PHP_CodeSniffer.
 
@@ -348,7 +348,7 @@ The core Islandora module provides an API that module developers can use. This A
 
 ### Hooks
 
-A Drupal (and Islandora) hook is a special type of function that is fired at a predefined time in the execution of a page request. They are "defined" by a module and "implemented" by other modules. In this way, hooks lets a Drupal module add functionality that can be used by another module. Unlike a function, which you call to get an expected return value, a hook lets you write a function that always gets called by Drupal at a specific time. More information on hooks is available from [drupal.org](https://www.drupal.org/node/292).
+Drupal is designed to be highly extensible, and a basic tenet of Drupal development is "Never hack core." The most important way to extend Drupal is to implement a hook in a module. A Drupal (and Islandora) hook is a special type of function that is fired at a predefined time in the execution of a page request. They are "defined" by a module and "implemented" by other modules. In this way, hooks let a Drupal module add functionality that can be used by another module. Unlike an ordinary function, which you call to get an expected return value, implementing a hook lets you write a function that always gets called by Drupal at a specific time on a specific event. More information on hooks is available from [drupal.org](https://www.drupal.org/node/292).
 
 For example, `hook_islandora_object_access()` is defined by the Islandora module, but is used by many other modules to determine whether a user is allowed to perform a specific action on an object.
 
@@ -386,7 +386,7 @@ function hook_islandora_object_access($op, $object, $user) {
 
 The entry provides the function signature and the parameter/return documentation, plus (in some cases) some sample code. The function signature begins with the word 'hook' but when we implement the hook in our modules, we replace that with the name of the module. This "magic" naming convention is how Drupal knows to fire the hook implementations.
 
-Here are three implementations of the hook from islandora.module itself:
+Here are three implementations of the hook. First, from islandora.module itself:
 
 ```php
 /**
@@ -402,7 +402,7 @@ function islandora_islandora_object_access($op, $object, $user) {
 }
 ```
 
-from islandora_scholar_embargo.module:
+From islandora_scholar_embargo.module:
 
 ```php
 /**
@@ -418,7 +418,7 @@ function islandora_scholar_embargo_islandora_object_access($op, $object, $user) 
   }
 }
 ```
-from islandora_basic_collection.module:
+From islandora_basic_collection.module:
 
 ```php
 /**
@@ -464,7 +464,7 @@ function islandora_basic_collection_islandora_object_access($op, $object, $user)
 }
 ```
 
-Hooks are fired in the providing module's code via the [Drupal API function](https://api.drupal.org/api/drupal/includes!module.inc/function/module_invoke_all/7) `module_invoke_all()`, which iterates through all modules that implement each hook and if it finds an implementation, fires it.
+Hooks are fired in the defining module's code via the [Drupal API function](https://api.drupal.org/api/drupal/includes!module.inc/function/module_invoke_all/7) `module_invoke_all()`, which iterates through all modules and, if a module implements the hook, fires it.
 
 Islandora provides many hooks. In the first exercise below, we'll implement the ones that are fired during the object add/update/purge lifecycle, and a couple of others.
 
@@ -474,9 +474,9 @@ These exercises focus on understanding and implementing Islandora hooks. Their u
 
 When we write code in exercies 1 and 3, we'll use simple functions such as `drupal_set_message()` and `dd()` to "do something". The module file `islandora_dev101.module` provides some scaffolding for the exercises. Exercise 2 is not a coding exercise, but it will get us looking at the documentation for hooks and at examples implementations in other modules.
 
-### Exercise 1: Detecting when objects are added, modified, or purged
+### Exercise 1: Doing something when objects are added, modified, or purged
 
-In this exercise, we will implement a few Islandora hooks that will let us display a message to the user when objects are added, modified, and deleted, or write the message to a file.
+In this exercise, we will implement a few Islandora hooks that will let us display a message to the user (or write a message to a file) when objects are added, modified, and deleted, or write the message to a file.
 
 1. Open the islandora_dev101.module file in an editor and add either `drupal_set_message()` to display a message to the user or `dd()` to write the message to a file where it says "// Do something" in the three function signatures (that is, hook implementations) at the bottom of the file. If you use `dd()`, the file written to will be `/tmp/drupal_debug.txt`.
 2. Your code should print a property of the Islandora object, such as ID or owner.
@@ -489,7 +489,7 @@ A [sample implementation](https://gist.github.com/mjordan/99fac083970ea43528c6) 
 In this exercise, we will take a detailed look at [islandora.api.php](https://github.com/Islandora/islandora/blob/7.x/islandora.api.php), the standard documentation for the hooks that Islandora provides to developers. We will also look at some examples in Islandora modules.
 
 1. Look up the entry for `hook_islandora_object_alter()` in the API documentation.
-2. Find an implementation of this hook in an Islandora module.
+2. Find an implementation of this hook in an Islandora module, either in the ones installed on your VM or on Github.
 3. Repeat steps 1 and 2 for `hook_islandora_datastream_modified()`, `hook_islandora_ingest_steps()`, and `hook_islandora_derivative()`.
 
 ### Exercise 3: Doing something with a datastream
