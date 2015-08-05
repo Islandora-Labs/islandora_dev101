@@ -15,7 +15,7 @@ The workshop will cover the following topics:
 * Setting up a development environment
 * Islandora objects
 * Islandora's relationship with Drupal
-* Islandora other major components
+* Islandora's other major components
 * Islandora modules
   * Types
   * Structure
@@ -240,13 +240,13 @@ Islandora modules can be grouped into four rough categories:
   * [Islandora OpenSeadragon](https://github.com/Islandora/islandora_openseadragon)
   * [Islandora PDF.js](https://github.com/Islandora/islandora_pdfjs)
 * integration modules: modules that integrate Islandora objects with other components of the Islandora stack or with Drupal APIs
+  * [Islandora Batch](https://github.com/Islandora/islandora_batch)
   * [Islandora Solr Views](https://github.com/Islandora/islandora_solr_views)
-  * [Islandora XML Forms](https://github.com/Islandora/islandora_xml_forms)
   * [Islandora XACML Editor](https://github.com/Islandora/islandora_xacml_editor)
 * utility modules: modules that perform a set of tasks related to Islanodra objects or the Islandora stack
   * [Islandora Checksum](https://github.com/Islandora/islandora_checksum)
-  * [Islandora Batch](https://github.com/Islandora/islandora_batch)
   * [Islandora Pathauto](https://github.com/Islandora/islandora_pathauto)
+  * [Islandora XML Forms](https://github.com/Islandora/islandora_xml_forms)
 
 These categories are for overview purposes only; there are no code-level or structural requirements for the various types. Two exceptions are that 1) solution packs generally provide collection policy and MODS forms definition files, and implement some specific functions that register these; and 2) viewer modules implement `hook_islandora_viewer_info()`.
 
