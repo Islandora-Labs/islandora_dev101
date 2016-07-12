@@ -1,8 +1,8 @@
 ## Overview
 
-This 2-hour workshop will introduce Islandora objects and how they work within Drupal. It will also cover the basics of Islandora modules, and introduce Drupal/Islandora hooks. The workshop does not cover Solr indexing, Drupal theming, writing tests for Islandora modules or access control in Islandora. It will cover Islandora 7.x-1.x development (that is, Islandora using Fedora Commons 3.x), not Islandora 7.x-2.x (using Fedora Commons 4.x).
+This 2~ -hour workshop will introduce Islandora objects and how they work within Drupal. It will also cover the basics of Islandora modules, and introduce Drupal/Islandora hooks. The workshop does not cover Solr indexing, Drupal theming, writing tests for Islandora modules or access control in Islandora. It will cover Islandora 7.x-1.x development (that is, Islandora using Drupal 7 and Fedora Commons 3.x), not Islandora CLAW (the ongoing Islandora 2.x project, using Drupal 8 and Fedora Commons 4.x).
 
-The intended audience for the workshop is people who have some expeience developing in PHP but not necessarily experience with Drupal. Experience using text editors such as vim, nano/pico or Emacs will be very useful, as will experience using Git.
+The intended audience for the workshop is people who have some experience developing in PHP but not necessarily experience with Drupal. Experience using text editors such as vim, nano/pico or Emacs will be very useful, as will experience using Git.
 
 In the second hour of the workshop, participants will start coding their own simple Islandora module. To prepare for this part of the workshop, make sure you have the following installed on your laptop:
 
@@ -47,7 +47,7 @@ You run drush commands from anywhere within the Drupal installation directory. D
 
 ## Islandora objects
 
-Islandora objects are the basic structural component of content within an Islandora repository. Objects contain properties and datastreams (described below), and are containied within parent objects, typically Islandora collections but in some cases as children of compound objects. Islandora objects are a subclass of [Fedora Commons objects](https://wiki.duraspace.org/display/FEDORA38/Fedora+Digital+Object+Model) that follow specific conventions surrounding datastreams and content models.
+Islandora objects are the basic structural component of content within an Islandora repository. Objects contain properties and datastreams (described below), and are contained within parent objects, typically Islandora collections but in some cases as children of compound objects. Islandora objects are a subclass of [Fedora Commons objects](https://wiki.duraspace.org/display/FEDORA38/Fedora+Digital+Object+Model) that follow specific conventions surrounding datastreams and content models.
 
 ### Properties and datastreams
 
@@ -88,7 +88,7 @@ Datastreams can be structurally related to an object in four different ways. The
 * Externally referenced content (abbreviated "E")
 * Redirect referenced content (abbreviated "R")
 
-Inline XML content is stored within an object's FOXML (more information on FOXML is provided below). Managed content is stored as files within Fedora (datastreams of this control group are the rough equivalent of attachments in our email analogy). These two type of datastreams are the most common in Islandora, but E and R datastreams can also be used. Externally referenced content is stored outside of Fedora and it identified within Fedora by a URL; when Fedora needs the datastream's content, it retrieves it from the URL. Redirect referenced content is also identified by a URL, but the datastream's content is never retieved by Fedora; instead, it just redirects users to the URL.
+Inline XML content is stored within an object's FOXML (more information on FOXML is provided below). Managed content is stored as files within Fedora (datastreams of this control group are the rough equivalent of attachments in our email analogy). These two types of datastreams are the most common in Islandora, but E and R datastreams can also be used. Externally referenced content is stored outside of Fedora and is identified within Fedora by a URL; when Fedora needs the datastream's content, it retrieves it from the URL. Redirect referenced content is also identified by a URL, but the datastream's content is never retrieved by Fedora; instead, it just redirects users to the URL.
 
 An Islandora object's properties and datastream properties can be accessed like any other PHP object's properties. Within Islandora modules, you usually have access to either a full Islandora object, or its PID (persistent identifier). A common pattern for accessing the object is:
 
@@ -105,7 +105,7 @@ if ($object) {
 }
  ```
  
- To access the object's datastreams, you can use this pattern:
+ To access the object's datastreams individually, you can use this pattern:
  
  ```php
  // $dsid is the datastream ID.
@@ -113,28 +113,34 @@ if ($object) {
  ```
  or
 ```php
-// 'DC' is the datastream ID.
-$object['DC']->content;
+// $dsid is the datastream ID.
+$datastream = $object[$dsid];
 ```
- or
+To get the content of a specific datastream, 
+```php
+$rawxml = $object['DC']->content;
+```
+
+ To access all an object's datastreams: 
  ```php
  foreach ($object as $datastream) {
   // Datastream properties can be gotten and set in ways similar to objects' properties.
   $ds_label = $datastream->label;
   $datastream->label = "New label";
   $datastream_content = $datastream->content;
+  $datastream->content = $my_new_content;
 }
 ```
  
 ### Content models
  
-All Islandora objects have one or more content models (usually only one; having more than one is not common). The content model is assigned to an object by a solution pack when it creates the object (via a web form or a batch ingest, for example). An object's content model tells Islandora which add/edit metadata form to use, which datastreams are required and optional, and which viewer to use when rendering the object. You can access an object's content models using the `$object->models` property.
- 
-Solution packs define some compontents of a content model - the datastreams that make up an object, and those datastreams' mime types, in a "ds_composite_model.xml" file. For example, the PDF Solution Pack's [composite model file](https://github.com/Islandora/islandora_solution_pack_pdf/blob/7.x/xml/islandora_pdf_ds_composite_model.xml) shows that the OBJ datastream's mime type is "application/pdf", and that the MODS datastream is optional for objects of this content model.
+All Islandora objects have one or more content models (usually only one; having more than one is not common). The content model is assigned to an object by a solution pack when the object is created (via a web form or a batch ingest, for example). An object's content model tells Islandora which add/edit metadata form to use, which datastreams are required and optional, and which viewer to use when rendering the object. You can access an object's content models using the `$object->models` property (code) or by peering into the RELS-EXT datastream. The content models are identified by the `fedora-model:hasModel` relationship, and in the above sample RELS-EXT snippet the content model is identified by `info:fedora/islandora:sp_basic_image`.
+
+Aside: Content models are, themselves, Islandora Objects. They are created when solution packs are installed, and are defined by code in the module file. In the above example, the PID of the content model is `islandora:sp_basic_image`. The `info:fedora` part just tells Fedora that this is a local Fedora object. The content model object defines what datastreams an object of that type is allowed to have, in its own special datastream named DS-COMPOSITE-MODEL. If you don't want to open the object, you can see this in the solution pack module's "ds_composite_model.xml" file. For example, the PDF Solution Pack's [composite model file](https://github.com/Islandora/islandora_solution_pack_pdf/blob/7.x/xml/islandora_pdf_ds_composite_model.xml) shows that the OBJ datastream's mime type is "application/pdf", and that the MODS datastream is optional for objects of this content model.
 
 ## Islandora's relationship with Drupal
 
-Islandora uses Drupal as a web development framework and incorporates all of Drupal's major subsystems:
+Islandora uses Drupal as a web framework and incorporates all of Drupal's major subsystems:
 
 * The module framework
 * The menu system
@@ -155,11 +161,20 @@ In addition to Drupal, Islandora uses the following applications and libraries.
 ### Fedora Commons (a.k.a. Fedora Repository, a.k.a. FCREPO)
 [Fedora Repository](https://wiki.duraspace.org/display/FF/Downloads) provides low-level asset management services within Islandora, including storage, access control, versioning, and checksumming. Islandora's object model, described above, is inherited directly from Fedora Repository's object model.
 
-As mentioned earlier, the current version of Islandora, 7.x-1.x, uses Fedora Repository 3.x, but the Islandora community [is migrating](https://github.com/Islandora/Islandora-Fedora4-Interest-Group) to Fedora Repository version 4.x. Islandora running Fedora 4.x will have the version number 7.x-2.x.
+As mentioned earlier, the current version of Islandora, 7.x-1.x, uses Fedora Repository 3.x, but the Islandora community [is migrating](https://github.com/Islandora/Islandora-Fedora4-Interest-Group) to Fedora Repository version 4.x. Islandora running Fedora 4.x will likely have the pattern 8.x-2.x, as it will be running on Drupal 8.
 
-An important part of Fedora Commons 3.x that is used heavily throughout Islandora is the [Resource Index](https://wiki.duraspace.org/display/FEDORA38/Resource+Index) (abbrieviated "RI"), which provides [SPARQL](https://en.wikipedia.org/wiki/SPARQL) and [iTQL](http://docs.mulgara.org/itqlcommands/index.html) query interfaces for basic object attributes. Attributes available in the RI are derived from the content of the DC, RELS-EXT, and RELS-INT datastreams, and also include some properties available in the object's FOXML.
+An important part of Fedora Commons 3.x that is used heavily throughout Islandora is the [Resource Index](https://wiki.duraspace.org/display/FEDORA38/Resource+Index) (abbrieviated "RI"), which provides [SPARQL](https://en.wikipedia.org/wiki/SPARQL) and [iTQL](http://docs.mulgara.org/itqlcommands/index.html) query interfaces for basic object attributes. Attributes available in the RI are derived from the content of the DC, RELS-EXT, and RELS-INT datastreams, and also include some properties available in the object's FOXML (more on FOXML in a moment).
 
-FOXML is an XML representation of the [Fedora object model](https://wiki.duraspace.org/display/FEDORA38/Fedora+Digital+Object+Model). In other words, a Fedora (and Islandora) object's FOXML file contains the object's properties and information about its datastreams. An example of an object's FOXML is [available here](https://wiki.duraspace.org/display/FEDORA35/FOXML+Reference+Example). Islandora doesn't typically modify an object's FOXML, but in some cases it parses it to retrieve information that is not easily accessible through other means. FOXML can be used to move objects between instances of Fedora Commons repositories.
+For debugging or fun, you can access the Resource Index of your installation at http://localhost:8080/fedora/risearch. A sample SPARQL query that you can try out is below. It will return a list of all objects which are members of the Islandora Root collection.
+ 
+```sparql
+SELECT ?o
+FROM <#ri>
+WHERE {
+ ?o <fedora-rels-ext:isMemberOfCollection> <info:fedora/islandora:root>}
+```
+
+FOXML is an XML representation of the [Fedora object model](https://wiki.duraspace.org/display/FEDORA38/Fedora+Digital+Object+Model). In other words, a Fedora (and Islandora) object's FOXML file contains the object's properties and information about its datastreams. An example of an object's FOXML is [available here](https://wiki.duraspace.org/display/FEDORA35/FOXML+Reference+Example). Islandora doesn't typically modify an object's FOXML directly, but in some cases it parses it to retrieve information that is not easily accessible through other means. FOXML can be used to move objects between instances of Fedora Commons repositories.
 
 ### Tuque
 
@@ -222,9 +237,9 @@ The standard [documentation](https://github.com/Islandora/islandora/wiki/Working
 
 ### Solr
 
-[Apache Solr](http://lucene.apache.org/solr/) provides search and retrieval functionality for metadata contained in Islandora objects' XML datastreams, and for full text of books, newspapers, and other types of content. Solr extracts queriable content from datastreams using a third-party application called the [Generic Search Service](https://wiki.duraspace.org/display/FCSVCS/Generic+Search+Service+2.7) (or more commonly, gsearch).
+[Apache Solr](http://lucene.apache.org/solr/) provides search and retrieval functionality for metadata contained in Islandora objects' XML datastreams, and for full text of books, newspapers, and other types of content. Solr extracts query-able content from datastreams using a third-party application called the [Generic Search Service](https://wiki.duraspace.org/display/FCSVCS/Generic+Search+Service+2.7) (or more commonly, gsearch). To configure what information gets pulled out of your object and into Solr, you will have to configure some XSLT's within Gsearch. 
 
-The general difference between Fedora's Resource Index and Solr is that the RI is used for querying object properties, while Solr is used for querying datastream content. For example, when an Islandora module needs to find all of the pages in a book, it will query the RI, because that is where the object's "isPageOf" relationship is stored; when a user wants to find all books that contain the keywords "dog" and "sled", Islandora queries Solr, because the OCR datastreams of book pages are indexed in Solr.
+The general difference between Fedora's Resource Index and Solr is that the RI is used for querying object properties, while Solr is used for querying datastream content. For example, when an Islandora module needs to find all of the pages in a book, it will query the RI, because that is where the object's "isPageOf" relationship is stored; when a user wants to find all books that contain the keywords "dog" and "sled", Islandora queries Solr, because the OCR datastreams of book pages are indexed in Solr. Solr is also much faster, and scales better. However the RI is more powerful, and you can chain together queries, e.g. find me all the parent collections of objects with TN datastreams. 
 
 ## Islandora modules
 
