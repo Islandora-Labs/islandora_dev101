@@ -35,7 +35,8 @@ The [Islandora Vagrant](https://github.com/Islandora-Labs/islandora_vagrant) vir
 If you want to edit files in a graphical text editor (or IDE) that you have installed on your local (host) machine, you can set up your modules directory to be shared between your host and your Islandora Vagrant VM:
 
 * Within your Islandora Vagrant directory, `vagrant ssh`
-* Run the command `cp -r /var/www/drupal/sites/all/modules /vagrant`
+* Run the command 
+     `cp -r /var/www/drupal/sites/all/modules /vagrant`
 * Exit your vagrant VM with `exit`
 * Add the following to your Vagrantfile (e.g. just under the shared_dir line): `config.vm.synced_folder "modules", "/var/www/drupal/sites/all/modules"` and save.
 * Within your Islandora Vagrant directory, run `vagrant reload`
