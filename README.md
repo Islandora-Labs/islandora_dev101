@@ -30,6 +30,21 @@ The workshop will cover the following topics:
 
 The [Islandora Vagrant](https://github.com/Islandora-Labs/islandora_vagrant) virtual machine offers a full Islandora environment that is both easy to use and customizable.
 
+### Optional: Setting up a shared Modules folder
+
+If you want to edit files in a graphical text editor (or IDE) that you have installed on your local (host) machine, you can set up your modules directory to be shared between your host and your Islandora Vagrant VM:
+
+* Within your Islandora Vagrant directory, `vagrant ssh`
+* Run the command 
+     `cp -r /var/www/drupal/sites/all/modules /vagrant`
+* Exit your vagrant VM with `exit`
+* Add the following to your Vagrantfile (e.g. just under the shared_dir line) and save: 
+
+```config.vm.synced_folder "modules", "/var/www/drupal/sites/all/modules"```
+* Within your Islandora Vagrant directory, run `vagrant reload`
+
+Now you can edit the files right there, and the results are immediately available to the VM. Note that this method of sharing folders is known to be slow, especially if you have XDebug running. A more performant method is to use "deployment" that scp's files into your VM, but that will not be covered in this workshop.
+
 ### Drush
 
 [Drush](http://www.drush.org/en/master/), the Drupal shell, is an essential tool for Drupal developers and administrators. Some commands you will want to use while you develop for Islandora:
