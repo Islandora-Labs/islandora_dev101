@@ -39,6 +39,7 @@ If you want to edit files in a graphical text editor (or IDE) that you have inst
      `cp -r /var/www/drupal/sites/all/modules /vagrant`
 * Exit your vagrant VM with `exit`
 * Add the following to your Vagrantfile (e.g. just under the shared_dir line) and save: 
+
 ```config.vm.synced_folder "modules", "/var/www/drupal/sites/all/modules"```
 * Within your Islandora Vagrant directory, run `vagrant reload`
 
