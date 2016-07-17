@@ -38,7 +38,8 @@ If you want to edit files in a graphical text editor (or IDE) that you have inst
 * Run the command 
      `cp -r /var/www/drupal/sites/all/modules /vagrant`
 * Exit your vagrant VM with `exit`
-* Add the following to your Vagrantfile (e.g. just under the shared_dir line): `config.vm.synced_folder "modules", "/var/www/drupal/sites/all/modules"` and save.
+* Add the following to your Vagrantfile (e.g. just under the shared_dir line) and save: 
+```config.vm.synced_folder "modules", "/var/www/drupal/sites/all/modules"```
 * Within your Islandora Vagrant directory, run `vagrant reload`
 
 Now you can edit the files right there, and the results are immediately available to the VM. Note that this method of sharing folders is known to be slow, especially if you have XDebug running. A more performant method is to use "deployment" that scp's files into your VM, but that will not be covered in this workshop.
