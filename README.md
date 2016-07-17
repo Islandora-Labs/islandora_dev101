@@ -194,7 +194,7 @@ FOXML is an XML representation of the [Fedora object model](https://wiki.duraspa
 
 ### Tuque
 
-[Tuque](https://github.com/Islandora/tuque) is the PHP API that Islandora uses to communicate with Fedora Commons. Tuque is basically a wrapper around Fedora's REST interface. Tuque is `included` by the core Islandora module, which makes its functionality available within the Drupal environment for all other modules. Module developers don't need to `include` it in their code themselves.
+[Tuque](https://github.com/Islandora/tuque) is the PHP API that Islandora uses to communicate with Fedora Commons and that translates Fedora Commons objects to and from PHP objects. Tuque is basically a wrapper around Fedora's REST interface. Tuque is `included` by the core Islandora module, which makes its functionality available within the Drupal environment for all other modules. Module developers don't need to `include` it in their code themselves.
 
 Tuque can be used outside of the Islandora codebase as a standalone API library. Here is a sample script that connects to the Fedora repository and issues a query against the Resource Index to get a list of all objects that are members of a specific collection.
 
