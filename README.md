@@ -106,6 +106,22 @@ Datastreams can be structurally related to an object in four different ways. The
 
 Inline XML content is stored within an object's FOXML (more information on FOXML is provided below). Managed content is stored as files within Fedora (datastreams of this control group are the rough equivalent of attachments in our email analogy). These two types of datastreams are the most common in Islandora, but E and R datastreams can also be used. Externally referenced content is stored outside of Fedora and is identified within Fedora by a URL; when Fedora needs the datastream's content, it retrieves it from the URL. Redirect referenced content is also identified by a URL, but the datastream's content is never retrieved by Fedora; instead, it just redirects users to the URL.
 
+The Islandora graphical user interface exposes a subset of an object's properties and datastreams to administrative users. To illustrate this, we can use the following basic image object:
+
+![Sample object](/images/sample_object.png?raw=true "Sample object")
+
+The following properties are exposed by the Islandora admin interface, under the object's Manage > Properties tab:
+
+![Sample object properties](/images/sample_object_properties.png?raw=true "Sample object properties")
+
+And the following datastreams are exposed under the object's Manage > Datastreams tab:
+
+![Sample object datastreams](/images/sample_object_datastreams.png?raw=true "Sample object datastreams")
+
+An alternative view of the properties and datastreams is available in the Fedora Web Administrator application (available at http://host:8080/fedora/admin):
+
+![Sample object as viewed in the Fedora Admin app](/images/sample_object_fedora_admin.png?raw=true "Sample object as viewed in the Fedora Admin app")
+
 An Islandora object's properties and datastream properties can be accessed like any other PHP object's properties. Within Islandora modules, you usually have access to either a full Islandora object, or its PID (persistent identifier). A common pattern for accessing the object is:
 
 ```php
