@@ -57,8 +57,8 @@ You run drush commands from anywhere within the Drupal installation directory. D
 
 ### Some additional helpful tools
 
-* The [Devel](https://www.drupal.org/project/devel) contrib module (also installed on the Islandora Vagrant VM)
-* The [Coder](https://www.drupal.org/project/coder) contrib module
+* The [Devel](https://www.drupal.org/project/devel) contrib module (installed on the Islandora Vagrant VM)
+* The [Coder](https://www.drupal.org/project/coder) contrib module (installed on the Islandora Vagrant VM)
 * The [Islandora Sample Content Generator](https://github.com/mjordan/islandora_scg) module
 
 ## Islandora objects
