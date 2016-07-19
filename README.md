@@ -289,7 +289,7 @@ Islandora modules can be grouped into four rough categories:
   * [Islandora Batch](https://github.com/Islandora/islandora_batch)
   * [Islandora Solr Views](https://github.com/Islandora/islandora_solr_views)
   * [Islandora XACML Editor](https://github.com/Islandora/islandora_xacml_editor)
-* utility modules: modules that perform a set of tasks related to Islanodra objects or the Islandora stack
+* utility modules: modules that perform a set of tasks related to Islandora objects or the Islandora stack
   * [Islandora Checksum](https://github.com/Islandora/islandora_checksum)
   * [Islandora Pathauto](https://github.com/Islandora/islandora_pathauto)
   * [Islandora XML Forms](https://github.com/Islandora/islandora_xml_forms)
