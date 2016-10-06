@@ -12,8 +12,10 @@ In the second hour of the workshop, participants will start coding their own sim
 
 The workshop will cover the following topics:
 
-* Setting up a development environment
 * Islandora objects
+  * Content models
+  * Properties and datastreams
+  
 * Islandora's relationship with Drupal
 * Islandora's other major components
 * Islandora modules
@@ -22,48 +24,20 @@ The workshop will cover the following topics:
   * Islandora coding conventions
   * Islandora API
   * Hooks
+* Setting up a development environment
 * Hands-on exercises
-
-## Setting up a development environment
-
-### Islandora Vagrant
-
-The [Islandora Vagrant](https://github.com/Islandora-Labs/islandora_vagrant) virtual machine offers a full Islandora environment that is both easy to use and customizable.
-
-### Optional: Setting up a shared Modules folder
-
-If you want to edit files in a graphical text editor (or IDE) that you have installed on your local (host) machine, you can set up your modules directory to be shared between your host and your Islandora Vagrant VM:
-
-* Within your Islandora Vagrant directory, `vagrant ssh`
-* Run the command 
-     `cp -r /var/www/drupal/sites/all/modules /vagrant`
-* Exit your vagrant VM with `exit`
-* Add the following to your Vagrantfile (e.g. just under the shared_dir line) and save: 
-
-```config.vm.synced_folder "modules", "/var/www/drupal/sites/all/modules"```
-* Within your Islandora Vagrant directory, run `vagrant reload`
-
-Now you can edit the files right there, and the results are immediately available to the VM. Note that this method of sharing folders is known to be slow, especially if you have XDebug running. A more performant method is to use your IDE's "deployment" tools that synch files into your VM, but that will not be covered in this workshop.
-
-### Drush
-
-[Drush](http://www.drush.org/en/master/), the Drupal shell, is an essential tool for Drupal developers and administrators. Some commands you will want to use while you develop for Islandora:
-
-* `drush cc all`: clears all of Drupal's caches.
-* `drush en module_name`: enables the module with 'module_name'. If the module is hosted on Drupal.org, will also download it and all module dependencies if necessary.
-* `drush dis module_name`: disables the module with 'module_name'.
-
-You run drush commands from anywhere within the Drupal installation directory. Drush is installed and ready to use on the Islandora Vagrant VM.
-
-### Some additional helpful tools
-
-* The [Devel](https://www.drupal.org/project/devel) contrib module (installed on the Islandora Vagrant VM)
-* The [Coder](https://www.drupal.org/project/coder) contrib module (installed on the Islandora Vagrant VM)
-* The [Islandora Sample Content Generator](https://github.com/mjordan/islandora_scg) module
 
 ## Islandora objects
 
 Islandora objects are the basic structural component of content within an Islandora repository. Objects contain properties and datastreams (described below), and are contained within parent objects, typically Islandora collections but in some cases as children of compound objects. Islandora objects are a subclass of [Fedora Commons objects](https://wiki.duraspace.org/display/FEDORA38/Fedora+Digital+Object+Model) that follow specific conventions surrounding datastreams and content models.
+
+### Content models
+ 
+All Islandora objects have one or more content models (usually only one; having more than one is not common). The content model is assigned to an object by a solution pack when the object is created (via a web form or a batch ingest, for example). An object's content model tells Islandora which add/edit metadata form to use, which datastreams are required and optional, and which viewer to use when rendering the object. You can access an object's content models using the `$object->models` property (code) or by peering into the RELS-EXT datastream. The content models are identified by the `fedora-model:hasModel` relationship, and in the above sample RELS-EXT snippet the content model is identified by `info:fedora/islandora:sp_basic_image`.
+
+Aside: Content models are, themselves, Islandora Objects. They are created when solution packs are installed, and are defined by code in the module file. In the above example, the PID of the content model is `islandora:sp_basic_image`. The `info:fedora` part just tells Fedora that this is a local Fedora object. The content model object defines what datastreams an object of that type is allowed to have, in its own special datastream named DS-COMPOSITE-MODEL. If you don't want to open the object, you can see this in the solution pack module's "ds_composite_model.xml" file. For example, the PDF Solution Pack's [composite model file](https://github.com/Islandora/islandora_solution_pack_pdf/blob/7.x/xml/islandora_pdf_ds_composite_model.xml) shows that the OBJ datastream's mime type is "application/pdf", and that the MODS datastream is optional for objects of this content model.
+
+
 
 ### Properties and datastreams
 
@@ -162,12 +136,6 @@ $rawxml = $object['DC']->content;
   $datastream->content = $my_new_content;
 }
 ```
- 
-### Content models
- 
-All Islandora objects have one or more content models (usually only one; having more than one is not common). The content model is assigned to an object by a solution pack when the object is created (via a web form or a batch ingest, for example). An object's content model tells Islandora which add/edit metadata form to use, which datastreams are required and optional, and which viewer to use when rendering the object. You can access an object's content models using the `$object->models` property (code) or by peering into the RELS-EXT datastream. The content models are identified by the `fedora-model:hasModel` relationship, and in the above sample RELS-EXT snippet the content model is identified by `info:fedora/islandora:sp_basic_image`.
-
-Aside: Content models are, themselves, Islandora Objects. They are created when solution packs are installed, and are defined by code in the module file. In the above example, the PID of the content model is `islandora:sp_basic_image`. The `info:fedora` part just tells Fedora that this is a local Fedora object. The content model object defines what datastreams an object of that type is allowed to have, in its own special datastream named DS-COMPOSITE-MODEL. If you don't want to open the object, you can see this in the solution pack module's "ds_composite_model.xml" file. For example, the PDF Solution Pack's [composite model file](https://github.com/Islandora/islandora_solution_pack_pdf/blob/7.x/xml/islandora_pdf_ds_composite_model.xml) shows that the OBJ datastream's mime type is "application/pdf", and that the MODS datastream is optional for objects of this content model.
 
 ## Islandora's relationship with Drupal
 
@@ -184,6 +152,46 @@ Islandora uses Drupal as a web framework and incorporates all of Drupal's major 
 * APIs offered by contrib modules such as Views, Rules, Pathauto, Context, and others
 
 In fact, the only part of Drupal that Islandora doesn't use is the [entity/node subsystem](https://www.drupal.org/node/1261744). Islandora replaces Drupal entities with Islandora objects. There are several modules that integrate Islandora objects with Drupal entities (for instance, [Islandora Sync](https://github.com/islandora/islandora_sync) and [Islandora Entity Bridge](https://github.com/btmash/islandora_entity_bridge)), but by default, Islandora does not create Drupal nodes corresponding to Islandora objects.
+
+
+
+## Setting up a development environment
+
+### Islandora Vagrant
+
+The [Islandora Vagrant](https://github.com/Islandora-Labs/islandora_vagrant) virtual machine offers a full Islandora environment that is both easy to use and customizable.
+
+### Optional: Setting up a shared Modules folder
+
+If you want to edit files in a graphical text editor (or IDE) that you have installed on your local (host) machine, you can set up your modules directory to be shared between your host and your Islandora Vagrant VM:
+
+* Within your Islandora Vagrant directory, `vagrant ssh`
+* Run the command 
+     `cp -r /var/www/drupal/sites/all/modules /vagrant`
+* Exit your vagrant VM with `exit`
+* Add the following to your Vagrantfile (e.g. just under the shared_dir line) and save: 
+
+```config.vm.synced_folder "modules", "/var/www/drupal/sites/all/modules"```
+* Within your Islandora Vagrant directory, run `vagrant reload`
+
+Now you can edit the files right there, and the results are immediately available to the VM. Note that this method of sharing folders is known to be slow, especially if you have XDebug running. A more performant method is to use your IDE's "deployment" tools that synch files into your VM, but that will not be covered in this workshop.
+
+### Drush
+
+[Drush](http://www.drush.org/en/master/), the Drupal shell, is an essential tool for Drupal developers and administrators. Some commands you will want to use while you develop for Islandora:
+
+* `drush cc all`: clears all of Drupal's caches.
+* `drush en module_name`: enables the module with 'module_name'. If the module is hosted on Drupal.org, will also download it and all module dependencies if necessary.
+* `drush dis module_name`: disables the module with 'module_name'.
+
+You run drush commands from anywhere within the Drupal installation directory. Drush is installed and ready to use on the Islandora Vagrant VM.
+
+### Some additional helpful tools
+
+* The [Devel](https://www.drupal.org/project/devel) contrib module (installed on the Islandora Vagrant VM)
+* The [Coder](https://www.drupal.org/project/coder) contrib module (installed on the Islandora Vagrant VM)
+* The [Islandora Sample Content Generator](https://github.com/mjordan/islandora_scg) module
+
 
 ## Islandora's other major components
 
