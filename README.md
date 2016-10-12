@@ -11,7 +11,7 @@ In the second hour of the workshop, participants will start coding their own sim
 * an scp client if you prefer to work in a graphical text editor on your laptop
 
 The workshop will cover the following topics:
-
+* [The Stack] (#the-stack-islandora-cheeseburger)
 * [Islandora objects](#islandora-objects)
   * [Content models](#content-models)
   * [Properties and datastreams](#properties-and-datastreams)
@@ -45,7 +45,7 @@ Islandora objects are
   * Read (view) with Islandora viewers 
 * Findable, and read-able thanks to indexing in Solr
 
-![Islandora Cheeseburger](/images/islandora-burger.png?raw=true "Islandora Cheeseburger")
+![Islandora Cheeseburger](/images/islandora-burger.png "Islandora Cheeseburger")
 
 Where do you access the stack? 
 * The Fedora Part: http://[hostname]:8080/fedora/admin 
