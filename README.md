@@ -39,6 +39,10 @@ The workshop will cover the following topics:
 
 Islandora objects are the basic structural component of content within an Islandora repository. Objects contain properties and datastreams (described below), and are contained within parent objects, typically Islandora collections but in some cases as children of compound objects. Islandora objects are a subclass of [Fedora Commons objects](https://wiki.duraspace.org/display/FEDORA38/Fedora+Digital+Object+Model) that follow specific conventions surrounding datastreams and content models.
 
+
+![Fedora 3.x Object Model](/images/fedora-DOmodel.png?raw=true "Fedora 3.x Object Model")
+
+
 ### Content models
  
 All Islandora objects have one or more content models (usually only one; having more than one is not common). The content model is assigned to an object by a solution pack when the object is created (via a web form or a batch ingest, for example). An object's content model tells Islandora which add/edit metadata form to use, which datastreams are required and optional, and which viewer to use when rendering the object. You can access an object's content models using the `$object->models` property (code) or by peering into the RELS-EXT datastream. The content models are identified by the `fedora-model:hasModel` relationship, and in the above sample RELS-EXT snippet the content model is identified by `info:fedora/islandora:sp_basic_image`.
