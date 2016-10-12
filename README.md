@@ -12,58 +12,40 @@ In the second hour of the workshop, participants will start coding their own sim
 
 The workshop will cover the following topics:
 
-* Setting up a development environment
-* Islandora objects
-* Islandora's relationship with Drupal
-* Islandora's other major components
-* Islandora modules
-  * Types
-  * Structure
-  * Islandora coding conventions
-  * Islandora API
-  * Hooks
-* Hands-on exercises
-
-## Setting up a development environment
-
-### Islandora Vagrant
-
-The [Islandora Vagrant](https://github.com/Islandora-Labs/islandora_vagrant) virtual machine offers a full Islandora environment that is both easy to use and customizable.
-
-### Optional: Setting up a shared Modules folder
-
-If you want to edit files in a graphical text editor (or IDE) that you have installed on your local (host) machine, you can set up your modules directory to be shared between your host and your Islandora Vagrant VM:
-
-* Within your Islandora Vagrant directory, `vagrant ssh`
-* Run the command 
-     `cp -r /var/www/drupal/sites/all/modules /vagrant`
-* Exit your vagrant VM with `exit`
-* Add the following to your Vagrantfile (e.g. just under the shared_dir line) and save: 
-
-```config.vm.synced_folder "modules", "/var/www/drupal/sites/all/modules"```
-* Within your Islandora Vagrant directory, run `vagrant reload`
-
-Now you can edit the files right there, and the results are immediately available to the VM. Note that this method of sharing folders is known to be slow, especially if you have XDebug running. A more performant method is to use your IDE's "deployment" tools that synch files into your VM, but that will not be covered in this workshop.
-
-### Drush
-
-[Drush](http://www.drush.org/en/master/), the Drupal shell, is an essential tool for Drupal developers and administrators. Some commands you will want to use while you develop for Islandora:
-
-* `drush cc all`: clears all of Drupal's caches.
-* `drush en module_name`: enables the module with 'module_name'. If the module is hosted on Drupal.org, will also download it and all module dependencies if necessary.
-* `drush dis module_name`: disables the module with 'module_name'.
-
-You run drush commands from anywhere within the Drupal installation directory. Drush is installed and ready to use on the Islandora Vagrant VM.
-
-### Some additional helpful tools
-
-* The [Devel](https://www.drupal.org/project/devel) contrib module (installed on the Islandora Vagrant VM)
-* The [Coder](https://www.drupal.org/project/coder) contrib module (installed on the Islandora Vagrant VM)
-* The [Islandora Sample Content Generator](https://github.com/mjordan/islandora_scg) module
+* [Islandora objects](#islandora-objects)
+  * [Content models](#content-models)
+  * [Properties and datastreams](#properties-and-datastreams)
+  
+* [Islandora's relationship with Drupal](#islandoras-relationship-with-drupal)
+* [Islandora's other major components](#islandoras-other-major-components)
+  * [Fedora Commons (a.k.a. Fedora Repository, a.k.a. FCREPO)](#fedora-commons-aka-fedora-repository-aka-fcrepo)
+  * [Tuque](#tuque)
+  * [Solr](#solr)
+  * [FedoraGenericSearch (GSearch)](#fedoragenericsearch-gsearch)
+* [Islandora modules](#islandora-modules)
+  * [Types](#types)
+  * [Structure](#structure)
+  * [Islandora coding conventions](#islandora-coding-conventions)
+  * [Islandora API](#islandora-api)
+  * [Hooks](#hooks)
+* [Setting up a development environment](#setting-up-a-development-environment)
+* [Hands-on exercises](#hands-on-exercises)
+  * [Exercise 1: Doing something when objects are added, modified, or purged](#exercise-1-doing-something-when-objects-are-added-modified-or-purged)
+  * [Exercise 2: Exploring islandora.api.php](#exercise-2-exploring-islandora.api.php)
+  * [Exercise 3: Doing something with a datastream](#exercise-3-doing-something-with-a-datastream)
+* [Contributing back to the community](#contributing-back-to-the-community)
 
 ## Islandora objects
 
 Islandora objects are the basic structural component of content within an Islandora repository. Objects contain properties and datastreams (described below), and are contained within parent objects, typically Islandora collections but in some cases as children of compound objects. Islandora objects are a subclass of [Fedora Commons objects](https://wiki.duraspace.org/display/FEDORA38/Fedora+Digital+Object+Model) that follow specific conventions surrounding datastreams and content models.
+
+### Content models
+ 
+All Islandora objects have one or more content models (usually only one; having more than one is not common). The content model is assigned to an object by a solution pack when the object is created (via a web form or a batch ingest, for example). An object's content model tells Islandora which add/edit metadata form to use, which datastreams are required and optional, and which viewer to use when rendering the object. You can access an object's content models using the `$object->models` property (code) or by peering into the RELS-EXT datastream. The content models are identified by the `fedora-model:hasModel` relationship, and in the above sample RELS-EXT snippet the content model is identified by `info:fedora/islandora:sp_basic_image`.
+
+Aside: Content models are, themselves, Islandora Objects. They are created when solution packs are installed, and are defined by code in the module file. In the above example, the PID of the content model is `islandora:sp_basic_image`. The `info:fedora` part just tells Fedora that this is a local Fedora object. The content model object defines what datastreams an object of that type is allowed to have, in its own special datastream named DS-COMPOSITE-MODEL. If you don't want to open the object, you can see this in the solution pack module's "ds_composite_model.xml" file. For example, the PDF Solution Pack's [composite model file](https://github.com/Islandora/islandora_solution_pack_pdf/blob/7.x/xml/islandora_pdf_ds_composite_model.xml) shows that the OBJ datastream's mime type is "application/pdf", and that the MODS datastream is optional for objects of this content model.
+
+
 
 ### Properties and datastreams
 
@@ -162,12 +144,6 @@ $rawxml = $object['DC']->content;
   $datastream->content = $my_new_content;
 }
 ```
- 
-### Content models
- 
-All Islandora objects have one or more content models (usually only one; having more than one is not common). The content model is assigned to an object by a solution pack when the object is created (via a web form or a batch ingest, for example). An object's content model tells Islandora which add/edit metadata form to use, which datastreams are required and optional, and which viewer to use when rendering the object. You can access an object's content models using the `$object->models` property (code) or by peering into the RELS-EXT datastream. The content models are identified by the `fedora-model:hasModel` relationship, and in the above sample RELS-EXT snippet the content model is identified by `info:fedora/islandora:sp_basic_image`.
-
-Aside: Content models are, themselves, Islandora Objects. They are created when solution packs are installed, and are defined by code in the module file. In the above example, the PID of the content model is `islandora:sp_basic_image`. The `info:fedora` part just tells Fedora that this is a local Fedora object. The content model object defines what datastreams an object of that type is allowed to have, in its own special datastream named DS-COMPOSITE-MODEL. If you don't want to open the object, you can see this in the solution pack module's "ds_composite_model.xml" file. For example, the PDF Solution Pack's [composite model file](https://github.com/Islandora/islandora_solution_pack_pdf/blob/7.x/xml/islandora_pdf_ds_composite_model.xml) shows that the OBJ datastream's mime type is "application/pdf", and that the MODS datastream is optional for objects of this content model.
 
 ## Islandora's relationship with Drupal
 
@@ -184,6 +160,46 @@ Islandora uses Drupal as a web framework and incorporates all of Drupal's major 
 * APIs offered by contrib modules such as Views, Rules, Pathauto, Context, and others
 
 In fact, the only part of Drupal that Islandora doesn't use is the [entity/node subsystem](https://www.drupal.org/node/1261744). Islandora replaces Drupal entities with Islandora objects. There are several modules that integrate Islandora objects with Drupal entities (for instance, [Islandora Sync](https://github.com/islandora/islandora_sync) and [Islandora Entity Bridge](https://github.com/btmash/islandora_entity_bridge)), but by default, Islandora does not create Drupal nodes corresponding to Islandora objects.
+
+
+
+## Setting up a development environment
+
+### Islandora Vagrant
+
+The [Islandora Vagrant](https://github.com/Islandora-Labs/islandora_vagrant) virtual machine offers a full Islandora environment that is both easy to use and customizable.
+
+### Optional: Setting up a shared Modules folder
+
+If you want to edit files in a graphical text editor (or IDE) that you have installed on your local (host) machine, you can set up your modules directory to be shared between your host and your Islandora Vagrant VM:
+
+* Within your Islandora Vagrant directory, `vagrant ssh`
+* Run the command 
+     `cp -r /var/www/drupal/sites/all/modules /vagrant`
+* Exit your vagrant VM with `exit`
+* Add the following to your Vagrantfile (e.g. just under the shared_dir line) and save: 
+
+```config.vm.synced_folder "modules", "/var/www/drupal/sites/all/modules"```
+* Within your Islandora Vagrant directory, run `vagrant reload`
+
+Now you can edit the files right there, and the results are immediately available to the VM. Note that this method of sharing folders is known to be slow, especially if you have XDebug running. A more performant method is to use your IDE's "deployment" tools that synch files into your VM, but that will not be covered in this workshop.
+
+### Drush
+
+[Drush](http://www.drush.org/en/master/), the Drupal shell, is an essential tool for Drupal developers and administrators. Some commands you will want to use while you develop for Islandora:
+
+* `drush cc all`: clears all of Drupal's caches.
+* `drush en module_name`: enables the module with 'module_name'. If the module is hosted on Drupal.org, will also download it and all module dependencies if necessary.
+* `drush dis module_name`: disables the module with 'module_name'.
+
+You run drush commands from anywhere within the Drupal installation directory. Drush is installed and ready to use on the Islandora Vagrant VM.
+
+### Some additional helpful tools
+
+* The [Devel](https://www.drupal.org/project/devel) contrib module (installed on the Islandora Vagrant VM)
+* The [Coder](https://www.drupal.org/project/coder) contrib module (installed on the Islandora Vagrant VM)
+* The [Islandora Sample Content Generator](https://github.com/mjordan/islandora_scg) module
+
 
 ## Islandora's other major components
 
@@ -270,7 +286,23 @@ The standard [documentation](https://github.com/Islandora/islandora/wiki/Working
 
 [Apache Solr](http://lucene.apache.org/solr/) provides search and retrieval functionality for metadata contained in Islandora objects' XML datastreams, and for full text of books, newspapers, and other types of content. Solr extracts query-able content from datastreams using a third-party application called the [Generic Search Service](https://wiki.duraspace.org/display/FCSVCS/Generic+Search+Service+2.7) (or more commonly, gsearch). To configure what information gets pulled out of your object and into Solr, you will have to configure some XSLT's within Gsearch. 
 
-The general difference between Fedora's Resource Index and Solr is that the RI is used for querying object properties, while Solr is used for querying datastream content. For example, when an Islandora module needs to find all of the pages in a book, it will query the RI, because that is where the object's "isPageOf" relationship is stored; when a user wants to find all books that contain the keywords "dog" and "sled", Islandora queries Solr, because the OCR datastreams of book pages are indexed in Solr. Solr is also much faster, and scales better. However the RI is more powerful, and you can chain together queries, e.g. find me all the parent collections of objects with TN datastreams. 
+The general difference between Fedora's Resource Index and Solr is that the RI is used for querying object properties, while Solr is used for querying datastream content. For example, when an Islandora module needs to find all of the pages in a book, it will query the RI, because that is where the object's "isPageOf" relationship is stored; when a user wants to find all books that contain the keywords "dog" and "sled", Islandora queries Solr, because the OCR datastreams of book pages are indexed in Solr. Solr is also much faster, and scales better. However the RI is more powerful, and you can chain together queries, e.g. find me all the parent collections of objects with TN datastreams.
+
+\* Technically this can be done in Solr depending on your particular schema using a JOIN
+http://localhost:8080/solr/select?q={!join from=RELS\_EXT\_isMemberOfCollection\_uri\_ms to=PID}datastreams\_ms:"TN"
+
+### FedoraGenericSearch (GSearch)
+
+[GSearch](https://github.com/fcrepo3/gsearch) is a Java application that listens to a JMS Queue for messages from a Fedora Repository and operates when it receives one. This operation is to add/update or delete a corresponding record from a configured Solr Repository.
+
+Normally GSearch is installed in your Tomcat Application container. Once configured all the pieces are located in 
+```
+$CATALINA\_HOME/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/
+⊢ index/FgsIndex - Contains your XSLTs and configuration parameters
+⊢ updater/FgsUpdaters - Contains configuration parameters of the message consumers
+⊢ repository/FgsRepos - Contains configuration parameters of the Fedora repository
+﹂ fedoragsearch.properties - contains configuration parameters
+```
 
 ## Islandora modules
 
@@ -514,6 +546,9 @@ Hooks are fired in the defining module's code via the [Drupal API function](http
 
 Islandora provides many hooks. In the first exercise below, we'll implement the ones that are fired during the object add/update/purge lifecycle, and a couple of others.
 
+
+ 
+---
 ## Hands-on exercices
 
 These exercises focus on understanding and implementing Islandora hooks. Their usefulness as solutions to real problems is secondary to their ability to illustrate when hooks are fired, and what variables are available within the implemented hook functions.
@@ -548,3 +583,39 @@ In this exercise, we will implement a hook that will write the content of an obj
 4. As a bonus, print the content of the RELS-EXT datastream.
 
 Some [sample implementations](https://gist.github.com/mjordan/4ae7724d5b3ffe38207f) are available.
+
+---
+## Contributing back to the community
+
+The Islandora Community thrives due to the help of developers/administrators/users from all over sharing knowledge, code and time for the benefit of all. We love to get help with improved documentation, bug fixes, improvements or even whole new modules. 
+
+When you are ready to contribute back, here are a couple of reminders.
+
+### Contributor License Agreements
+
+You need to have a [Contributor License Agreement](https://github.com/Islandora/islandora/wiki/Contributor-License-Agreements) on file with the Islandora Foundation before we can accept any updates to the codebase (this includes README updates).
+
+You need an **individual contributor license agreement** if you are contributing code from your own Github account and you need a **corporate contributor license agreement** if you are submitting from a work account.
+
+### JIRA tickets
+
+For any work that you do it's best to make a JIRA ticket - http://jira.duraspace.org/browse/ISLANDORA
+
+You can sign up for a JIRA account (if you have any issues contact Melissa Anez (manez at islandora dot ca))
+
+To work a ticket you:
+
+  * Create a ticket / Find a ticket you'd like to work
+  * Assign the ticket to yourself, if you can't do that contact Melissa Anez or Danny Lamb they can help.
+  * Press the "**Start Work**" button, so we know its is underway.
+  * Once you are ready and have made a pull request with your work
+     * please add the pull request to the ticket in a comment
+     * press the "**Start Review**" button
+  
+### Test any problems and solutions on a clean install
+
+Sometimes configuration changes can have unexpected consequences. Therefore we ask that before you submit a bug, if you can confirm that it occurs in a clean install of the 7.x branch of Islandora. Islandora Vagrant is of particular benefit for this task.
+
+### Clean your code
+
+Each pull request is tested using the Travis CI (continuous integration) system. This will check for code style and run any configured tests. You can perform these tasks locally before submitting your pull requests to avoid the issues later.
