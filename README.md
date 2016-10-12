@@ -35,6 +35,31 @@ The workshop will cover the following topics:
   * [Exercise 3: Doing something with a datastream](#exercise-3-doing-something-with-a-datastream)
 * [Contributing back to the community](#contributing-back-to-the-community)
 
+
+## The Stack (Islandora Cheeseburger)
+
+Islandora objects are
+* stored in Fedora
+* CRUDable thanks to Islandora
+  * Create, read via content-model-specific XML forms (built-in or customized)
+  * Read (view) with Islandora viewers 
+* Findable, and read-able thanks to indexing in Solr
+
+![Islandora Cheeseburger](/images/islandora-burger.png?raw=true "Islandora Cheeseburger")
+
+Where do you access the stack? 
+* The Fedora Part: http://[hostname]:8080/fedora/admin 
+  * Tuque (how to talk PHP to Fedora): https://github.com/Islandora/islandora/wiki/Working-With-Fedora-Objects-Programmatically-Via-Tuque
+  * Mulgara Triplestore: http://[hostname]:8080/fedora/risearch
+* The Solr Part: http://[hostname]:8080/solr/admin
+  * Gsearch (indexes Fedora objects into Solr): http://[hostname]:8080/fedoragsearch/rest
+
+More 
+* Gsearch transforms: [TOMCAT_HOME]/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/foxmlToSolr.xml
+* JWplayer, VideoJS, etc.: [DRUPAL_ROOT]/sites/all/libraries + associated module.
+* Seadragon, Djatoka: [TOMCAT_HOME]/webapps/adore-djatoka + associated library + associated module
+
+
 ## Islandora objects
 
 Islandora objects are the basic structural component of content within an Islandora repository. Objects contain properties and datastreams (described below), and are contained within parent objects, typically Islandora collections but in some cases as children of compound objects. Islandora objects are a subclass of [Fedora Commons objects](https://wiki.duraspace.org/display/FEDORA38/Fedora+Digital+Object+Model) that follow specific conventions surrounding datastreams and content models.
@@ -42,10 +67,19 @@ Islandora objects are the basic structural component of content within an Island
 
 ![Fedora 3.x Object Model](/images/fedora-DOmodel.png?raw=true "Fedora 3.x Object Model")
 
+This is the Fedora 3 object model. 
+
 
 ### Content models
  
-All Islandora objects have one or more content models (usually only one; having more than one is not common). The content model is assigned to an object by a solution pack when the object is created (via a web form or a batch ingest, for example). An object's content model tells Islandora which add/edit metadata form to use, which datastreams are required and optional, and which viewer to use when rendering the object. You can access an object's content models using the `$object->models` property (code) or by peering into the RELS-EXT datastream. The content models are identified by the `fedora-model:hasModel` relationship, and in the above sample RELS-EXT snippet the content model is identified by `info:fedora/islandora:sp_basic_image`.
+All Islandora objects have one or more content models (usually only one; having more than one is not common). The content model is assigned to an object by a solution pack when the object is created (via a web form or a batch ingest, for example). An object's content model tells Islandora which add/edit metadata form to use, which datastreams are required and optional, and which viewer to use when rendering the object. You can access an object's content models using the `$object->models` property (code) or by peering into the RELS-EXT datastream (GUI). The content models are identified by the `fedora-model:hasModel` relationship in the RELS-EXT datastream, for example, by the following line: 
+
+```xml
+[...]
+    <fedora-model:hasModel rdf:resource="info:fedora/islandora:sp_basic_image"></fedora-model:hasModel>
+[...]
+```
+
 
 Aside: Content models are, themselves, Islandora Objects. They are created when solution packs are installed, and are defined by code in the module file. In the above example, the PID of the content model is `islandora:sp_basic_image`. The `info:fedora` part just tells Fedora that this is a local Fedora object. The content model object defines what datastreams an object of that type is allowed to have, in its own special datastream named DS-COMPOSITE-MODEL. If you don't want to open the object, you can see this in the solution pack module's "ds_composite_model.xml" file. For example, the PDF Solution Pack's [composite model file](https://github.com/Islandora/islandora_solution_pack_pdf/blob/7.x/xml/islandora_pdf_ds_composite_model.xml) shows that the OBJ datastream's mime type is "application/pdf", and that the MODS datastream is optional for objects of this content model.
 
@@ -80,6 +114,8 @@ Full lists of [object properties](https://github.com/Islandora/islandora/wiki/Wo
   </rdf:Description>
 </rdf:RDF>
 ```
+
+#### Islandora Conventions
 
 In practice, most Islandora objects also have two other datastreams, the OBJ datastream, which contains the file that the user uploaded to Islandora when the object was initially created, and the MODS datastream, which contains a MODS XML file describing the object. [MODS](http://www.loc.gov/standards/mods/) is Islandora's default descriptive metadata schema, although others can be used.
 
