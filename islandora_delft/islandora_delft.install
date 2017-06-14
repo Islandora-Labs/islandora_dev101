@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * islandora_delft.install
+ */
+
+/**
+ * Implements hook_install().
+ *
+ * @see islandora_delft_islandora_required_objects()
+ */
+function islandora_delft_install() {
+  module_load_include('inc', 'islandora', 'includes/solution_packs');
+  islandora_install_solution_pack('islandora_delft');
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function islandora_delft_uninstall() {
+  module_load_include('inc', 'islandora', 'includes/solution_packs');
+  islandora_install_solution_pack('islandora_delft', 'uninstall');
+}

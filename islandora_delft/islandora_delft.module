@@ -1,0 +1,72 @@
+<?php
+
+/**
+ * @file
+ * Solution pack for Islandora Delft content model.
+ * Developed for iCampEU 2017 in Delft.
+ */
+
+/**
+ * Implements hook_islandora_required_objects().
+ *
+ * This function runs when the module is first installed.
+ */
+function islandora_delft_islandora_required_objects(IslandoraTuque $connection) {
+  $module_path = drupal_get_path('module', 'islandora_delft');
+
+  // Create and ingest Delft Content Model Object.
+
+  // This object defines a new content model, the "Islandora Delftware Content Model".
+  // Objects that are delftware will have model = "islandora:delftCModel".
+  // This object itself has model = "fedora-system:ContentModel-3.0".
+  $delft_content_model = $connection->repository->constructObject('islandora:delftwareCModel');
+  $delft_content_model->owner = 'fedoraAdmin';
+  $delft_content_model->label = 'Islandora Delftware Content Model';
+  $delft_content_model->models = 'fedora-system:ContentModel-3.0';
+
+  // DS-COMPOSITE-MODEL Datastream.
+
+  // The Content Model object contains a DS-COMPOSITE-MODEL datastream, which defines
+  // what datastreams are appropriate to this mimetype and their content models.
+  // Islandora does not enforce that all of these are populated, or that no other
+  // datastreams are allowed, but this is like a profile of what it should look like.
+
+  $datastream = $delft_content_model->constructDatastream('DS-COMPOSITE-MODEL', 'X');
+  $datastream->label = 'DS-COMPOSITE-MODEL';
+  $datastream->mimetype = 'application/xml';
+  $datastream->setContentFromFile("$module_path/xml/islandora_delft_ds_composite_model.xml", FALSE);
+  $delft_content_model->ingestDatastream($datastream);
+
+  // Delft Collection.
+
+  // We create a collection object to "hold" our Delftware objects. For a user
+  // to make a new object there must be a collection set up to contain objects
+  // of that type; as a courtesy to the user all solution packs provide a
+  // default collection object.
+  //
+  $delft_collection = $connection->repository->constructObject('islandora:delft_collection');
+  $delft_collection->owner = 'fedoraAdmin';
+  $delft_collection->label = 'Delftware Collection';
+  $delft_collection->models = 'islandora:collectionCModel';
+  $delft_collection->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOfCollection', 'islandora:root');
+
+  // Collection Policy Datastream.
+
+  // The collection policy datastream is an XML document that defines what
+  // kinds of objects this collection can hold.
+  $datastream = $delft_collection->constructDatastream('COLLECTION_POLICY', 'X');
+  $datastream->label = 'Collection policy';
+  $datastream->mimetype = 'application/xml';
+  $datastream->setContentFromFile("$module_path/xml/islandora_delft_collection_policy.xml", FALSE);
+  $delft_collection->ingestDatastream($datastream);
+
+  return array(
+    'islandora_delft' => array(
+      'title' => 'Islandora Delftware',
+      'objects' => array(
+        $delft_content_model,
+        $delft_collection,
+      ),
+    ),
+  );
+}
