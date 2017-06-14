@@ -136,3 +136,30 @@ function islandora_delft_islandora_delftwarecmodel_islandora_view_object($object
   return array('' => $output);
 }
 
+/**
+ * Implements hook_CMODEL_PID_islandora_derivative().
+ *
+ * Defines the derivatives that should be run for this content model.
+ */
+function islandora_delft_islandora_delftwarecmodel_islandora_derivative() {
+  $derivatives = array();
+  $derivatives[] = array(
+    'source_dsid' => 'OBJ',
+    'destination_dsid' => 'TN',
+    'weight' => '0',
+    'function' => array(
+      'islandora_delftware_add_tn_derivative',
+    ),
+    'file' => drupal_get_path('module', 'islandora_delft') . '/includes/derivatives.inc',
+  );
+  $derivatives[] = array(
+    'source_dsid' => 'OBJ',
+    'destination_dsid' => 'BLUE',
+    'weight' => '1',
+    'function' => array(
+      'islandora_delftware_add_blue_derivative',
+    ),
+    'file' => drupal_get_path('module', 'islandora_delft') . '/includes/derivatives.inc',
+  );
+  return $derivatives;
+}
