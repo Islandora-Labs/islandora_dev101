@@ -2,15 +2,11 @@
 
 This document covers the ways Fedora information gets into Solr.
 
-There are 3 main parts to Solr indexing.
-* Fedora
-* FedoraGSearch
-* Solr
+There are 3 main parts to Solr indexing. All three of these parts are (normally) located in your Tomcat container.
 
-All three of these parts are (normally) located in your Tomcat container. The standard locations are
 * Fedora - http://&lt;servername&gt;:8080/fedora
 * FedoraGSearch - http://&lt;servername&gt;:8080/fedoragsearch
-& Solr - http://&lt;servername&gt;:8080/solr
+* Solr - http://&lt;servername&gt;:8080/solr
 
 ## The workflow
 
