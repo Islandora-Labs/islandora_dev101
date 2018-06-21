@@ -11,7 +11,7 @@ In the second hour of the workshop, participants will start coding their own sim
 * an scp client if you prefer to work in a graphical text editor on your laptop
 
 The workshop will cover the following topics:
-* [The Stack] (#the-stack-islandora-cheeseburger)
+* [The Stack](#the-stack-islandora-cheeseburger)
 * [Islandora objects](#islandora-objects)
   * [Content models](#content-models)
   * [Properties and datastreams](#properties-and-datastreams)
