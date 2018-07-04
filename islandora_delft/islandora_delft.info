@@ -1,0 +1,7 @@
+name = "Islandora Delftware"
+description = "A sample module for developers to demonstrate creating a content model"
+dependencies[] = islandora
+dependencies[] = imagemagick
+package = Islandora Solution Packs
+core = 7.x
+version = 7.x-dev
