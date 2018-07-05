@@ -660,7 +660,7 @@ Sometimes configuration changes can have unexpected consequences. Therefore we a
 
 Each pull request is tested using the Travis CI (continuous integration) system. This will check for code style and run any configured tests. You can perform these tasks locally before submitting your pull requests to avoid the issues later.
 
-## Meta (about this tutorial)
+## Meta (about this workshop material)
 
 ### Maintainer
 
