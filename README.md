@@ -659,3 +659,19 @@ Sometimes configuration changes can have unexpected consequences. Therefore we a
 ### Clean your code
 
 Each pull request is tested using the Travis CI (continuous integration) system. This will check for code style and run any configured tests. You can perform these tasks locally before submitting your pull requests to avoid the issues later.
+
+## Meta (about this tutorial)
+
+### Maintainer
+
+* [Mark Jordan](https://github.com/mjordan)
+
+### Development and feedback
+
+Questions, suggestions, and typo corrections are welcome. Please open an issue if you have any.
+
+Pull requests are also welcome, but please open an issue before creating a pull request.
+
+### License
+
+* [GPLv3](http://www.gnu.org/licenses/gpl-3.0.txt)
